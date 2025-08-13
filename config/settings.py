@@ -204,18 +204,26 @@ CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'false').lower() == 'true'
 SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'false').lower() == 'true'
 
 if ENV in ('staging', 'production'):
-    # Force HTTPS-related defaults if not explicitly disabled
     SECURE_SSL_REDIRECT = True if os.getenv('SECURE_SSL_REDIRECT', '').strip() == '' else SECURE_SSL_REDIRECT
     SESSION_COOKIE_SECURE = True if os.getenv('SESSION_COOKIE_SECURE', '').strip() == '' else SESSION_COOKIE_SECURE
     CSRF_COOKIE_SECURE = True if os.getenv('CSRF_COOKIE_SECURE', '').strip() == '' else CSRF_COOKIE_SECURE
 
-    # Recommended extra headers for prod; keep in staging if you want parity
+    # 🔐 behind Railway's proxy
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    USE_X_FORWARDED_HOST = True
+
+    # 🍪 make session/CSRF cookies survive the proxy
+    SESSION_COOKIE_SAMESITE = "Lax"
+    CSRF_COOKIE_SAMESITE = "Lax"
+
+    # HSTS etc.
     SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '0' if ENV == 'staging' else '31536000'))
     SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('SECURE_HSTS_INCLUDE_SUBDOMAINS', 'true').lower() == 'true'
     SECURE_HSTS_PRELOAD = os.getenv('SECURE_HSTS_PRELOAD', 'true').lower() == 'true'
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
+
 
 # ───────────────────────────────── I18N
 LANGUAGE_CODE = 'en-us'
