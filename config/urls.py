@@ -23,6 +23,19 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model, login
 
+# --- DEBUG ONLY, remove after fixing ---
+from django.http import HttpResponse
+from django.db import connection
+
+def db_check(request):
+    s = connection.settings_dict
+    host = s.get("HOST")
+    name = s.get("NAME")
+    user = s.get("USER")
+    return HttpResponse(f"web DB -> host={host}, name={name}, user={user}")
+# --------------------------------------
+
+
 def whoami(request):
     u = request.user
     return HttpResponse(f"auth={u.is_authenticated}, user={getattr(u, 'email', getattr(u, 'username', 'anon'))}")
@@ -52,6 +65,7 @@ urlpatterns = [
     path("health/", health),
     path("whoami/", whoami),
     path("force-login/", force_login),
+    path("db-check/", db_check),
 
 ]
 
