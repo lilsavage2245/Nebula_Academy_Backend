@@ -203,6 +203,12 @@ SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'false').lower() == '
 CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'false').lower() == 'true'
 SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'false').lower() == 'true'
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",  # must be present for admin
+    # ...any others you use
+]
+
+
 if ENV in ('staging', 'production'):
     SECURE_SSL_REDIRECT = True if os.getenv('SECURE_SSL_REDIRECT', '').strip() == '' else SECURE_SSL_REDIRECT
     SESSION_COOKIE_SECURE = True if os.getenv('SESSION_COOKIE_SECURE', '').strip() == '' else SESSION_COOKIE_SECURE
