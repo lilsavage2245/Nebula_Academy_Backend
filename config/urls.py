@@ -19,6 +19,22 @@ from django.urls import path
 from django.urls import path, include
 from django.http import JsonResponse
 
+# DEBUG ONLY — remove after fixing
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model, login
+
+def whoami(request):
+    u = request.user
+    return HttpResponse(f"auth={u.is_authenticated}, user={getattr(u, 'email', getattr(u, 'username', 'anon'))}")
+
+def force_login(request):
+    U = get_user_model()
+    u = U.objects.get(email="admin.staging@nebulacodeacademy.com")
+    # ensure Django knows which backend to use
+    u.backend = "django.contrib.auth.backends.ModelBackend"
+    login(request, u)
+    return HttpResponse("logged-in")
+
 def health(_):
     return JsonResponse({"status": "ok"})
 
@@ -34,5 +50,8 @@ urlpatterns = [
     path('api/dashboard/', include('dashboard.urls')), 
     path("api/engagement/", include("engagement.urls")),
     path("health/", health),
+    path("whoami/", whoami),
+    path("force-login/", force_login),
 
 ]
+
