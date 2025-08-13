@@ -123,16 +123,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Prefer DATABASE_URL if present, else SQLite for local
 DATABASE_URL = (os.getenv("DATABASE_URL") or "").strip()
 
+if ENV in ("staging", "production") and not DATABASE_URL:
+    # Never silently fall back in non-local envs
+    raise ImproperlyConfigured("DATABASE_URL is not set in staging/production")
+
 if DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.parse(
             DATABASE_URL,
             conn_max_age=60,
-            ssl_require=True,  # works with Railway/Supabase/etc
+            ssl_require=True,
         )
     }
 else:
-    # Fallback for local dev when DATABASE_URL isn't set
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
