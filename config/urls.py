@@ -27,6 +27,22 @@ from django.contrib.auth import get_user_model, login
 from django.http import HttpResponse
 from django.db import connection
 
+from django.http import HttpResponse
+from django.conf import settings
+import os
+
+def env_check(request):
+    db = settings.DATABASES["default"]
+    lines = [
+        f"DJANGO_SETTINGS_MODULE env = {os.getenv('DJANGO_SETTINGS_MODULE')}",
+        f"settings module loaded = {settings.__name__}",
+        f"HAS_DATABASE_URL env = {bool(os.getenv('DATABASE_URL'))}",
+        f"DATABASES.default.ENGINE = {db['ENGINE']}",
+        f"DATABASES.default.NAME = {db.get('NAME')}",
+        f"DATABASES.default.HOST = {db.get('HOST')}",
+    ]
+    return HttpResponse("<br>".join(lines))
+
 def db_check(request):
     s = connection.settings_dict
     host = s.get("HOST")
@@ -66,6 +82,7 @@ urlpatterns = [
     path("whoami/", whoami),
     path("force-login/", force_login),
     path("db-check/", db_check),
+    path("env-check/", env_check),
 
 ]
 
