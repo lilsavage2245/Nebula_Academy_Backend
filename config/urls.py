@@ -29,19 +29,22 @@ from django.db import connection
 
 from django.http import HttpResponse
 from django.conf import settings
+from django.db import connection
 import os
 
 def env_check(request):
     db = settings.DATABASES["default"]
     lines = [
         f"DJANGO_SETTINGS_MODULE env = {os.getenv('DJANGO_SETTINGS_MODULE')}",
-        f"settings module loaded = {settings.__name__}",
-        f"HAS_DATABASE_URL env = {bool(os.getenv('DATABASE_URL'))}",
-        f"DATABASES.default.ENGINE = {db['ENGINE']}",
+        f"settings module loaded = {getattr(settings, 'SETTINGS_MODULE', None)}",
+        f"HAS DATABASE_URL env = {bool(os.getenv('DATABASE_URL'))}",
+        f"DATABASES.default.ENGINE = {db.get('ENGINE')}",
         f"DATABASES.default.NAME = {db.get('NAME')}",
         f"DATABASES.default.HOST = {db.get('HOST')}",
+        f'connection.vendor = {connection.vendor}',
     ]
     return HttpResponse("<br>".join(lines))
+
 
 def db_check(request):
     s = connection.settings_dict
