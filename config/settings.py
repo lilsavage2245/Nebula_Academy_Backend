@@ -121,19 +121,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # ───────────────────────────────── Database
 # Prefer DATABASE_URL if present, else SQLite for local
-DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+DATABASE_URL = (os.getenv("DATABASE_URL") or "").strip()
 
 if DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.parse(
             DATABASE_URL,
-            conn_max_age=600,     # persistent connections
-            ssl_require=True,     # require TLS on Railway
+            conn_max_age=60,
+            ssl_require=True,  # works with Railway/Supabase/etc
         )
     }
-    # Optional reliability (Django 4.2+):
-    DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
 else:
+    # Fallback for local dev when DATABASE_URL isn't set
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
