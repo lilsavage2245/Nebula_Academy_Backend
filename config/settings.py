@@ -17,6 +17,7 @@ import os
 from django.core.exceptions import ImproperlyConfigured
 from urllib.parse import urlparse
 from dotenv import load_dotenv
+import dj_database_url
 
 # ───────────────────────────────── Base / env
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -117,16 +118,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # ───────────────────────────────── Database
 # Prefer DATABASE_URL if present, else SQLite for local
 DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+
 if DATABASE_URL:
-    import dj_database_url
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,     # persistent connections
+            ssl_require=True,     # require TLS on Railway
+        )
     }
+    # Optional reliability (Django 4.2+):
+    DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
 else:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
 
