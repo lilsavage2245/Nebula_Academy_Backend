@@ -1,0 +1,430 @@
+[ERROR] 2025-07-23 16:46:28,207 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 50, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+                       ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 86, in open
+    self.connection = self.connection_class(
+                      ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 850, in create_connection
+    raise exceptions[0]
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 835, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+[ERROR] 2025-07-24 00:28:35,814 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 51, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <your_gmail@gmail.com>')
+[ERROR] 2025-07-24 01:28:41,418 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 51, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <no-reply@nebulacodeacademy.com>')
+[ERROR] 2025-07-24 01:32:42,472 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 51, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'no-reply@nebulacodeacademy.com')
+[ERROR] 2025-07-24 01:37:22,905 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 54, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <no-reply@nebulacodeacademy.com>')
+[ERROR] 2025-07-24 01:40:26,331 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 54, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 149, in _send
+    from_email = sanitize_address(email_message.from_email, encoding)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 93, in sanitize_address
+    raise ValueError(
+ValueError: Invalid address; only Nebula Code Academy <Nebula Code Academy > could be parsed from "Nebula Code Academy <Nebula Code Academy <3f07e2c6e8dc0c@inbox.mailtrap.io>>"
+[ERROR] 2025-07-24 01:43:09,475 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 54, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <3f07e2c6e8dc0c@inbox.mailtrap.io>')
+[ERROR] 2025-07-24 01:44:30,280 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 54, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <3f07e2c6e8dc0c@inbox.mailtrap.io>')
+[ERROR] 2025-07-24 01:46:16,737 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    from_email = formataddr((settings.DEFAULT_FROM_EMAIL))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\email\utils.py", line 89, in formataddr
+    name, address = pair
+    ^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 2)
+[ERROR] 2025-07-24 01:47:09,709 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', '3f07e2c6e8dc0c@inbox.mailtrap.io')
+[ERROR] 2025-07-24 01:49:07,791 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', '3f07e2c6e8dc0c@inbox.mailtrap.io')
+[ERROR] 2025-07-24 01:51:48,528 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', '3f07e2c6e8dc0c@inbox.mailtrap.io')
+[ERROR] 2025-07-24 01:52:18,070 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', '3f07e2c6e8dc0c@inbox.mailtrap.io')
+[ERROR] 2025-07-24 01:52:41,885 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', '3f07e2c6e8dc0c@inbox.mailtrap.io')
+[ERROR] 2025-07-24 01:54:06,228 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <no-reply@nebulacodeacademy.com>')
+[ERROR] 2025-07-24 01:55:22,646 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <no-reply@nebulacodeacademy.com>')
+[ERROR] 2025-07-24 01:56:07,841 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <no-reply@nebulacodeacademy.com>')
+[ERROR] 2025-07-24 01:56:33,324 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <no-reply@nebulacodeacademy.com>')
+[ERROR] 2025-07-24 01:59:11,332 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 52, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <no-reply@nebulacodeacademy.com>')
+[ERROR] 2025-07-24 02:01:12,723 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\smtplib.py", line 887, in sendmail
+    raise SMTPSenderRefused(code, resp, from_addr)
+smtplib.SMTPSenderRefused: (530, b'5.7.1 Authentication required', 'Nebula Code Academy <no-reply@nebulacodeacademy.com>')
+[ERROR] 2025-07-24 02:10:21,915 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 54, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 149, in _send
+    from_email = sanitize_address(email_message.from_email, encoding)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 93, in sanitize_address
+    raise ValueError(
+ValueError: Invalid address; only Nebula Code Academy <Nebula Code Academy > could be parsed from "Nebula Code Academy <Nebula Code Academy <no-reply@nebulacodeacademy.com>>"
+[ERROR] 2025-07-24 02:11:01,928 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 53, in send_verification_email
+    from_email = formataddr(settings.DEFAULT_FROM_EMAIL)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\AppData\Local\Programs\Python\Python311\Lib\email\utils.py", line 89, in formataddr
+    name, address = pair
+    ^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 2)
+[ERROR] 2025-07-24 02:15:05,932 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 54, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 149, in _send
+    from_email = sanitize_address(email_message.from_email, encoding)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 93, in sanitize_address
+    raise ValueError(
+ValueError: Invalid address; only Nebula Code Academy  could be parsed from "Nebula Code Academy <<no-reply@nebulacodeacademy.com>>"
+[ERROR] 2025-07-24 02:18:47,948 core.email | Failed to send verification email to jane@student.nebulacodeacademy.com
+Traceback (most recent call last):
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\core\utils\email.py", line 54, in send_verification_email
+    send_mail(
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\backends\smtp.py", line 149, in _send
+    from_email = sanitize_address(email_message.from_email, encoding)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\oluch\OneDrive\Documents\nebula_backend\venv\Lib\site-packages\django\core\mail\message.py", line 93, in sanitize_address
+    raise ValueError(
+ValueError: Invalid address; only Nebula Code Academy  could be parsed from "Nebula Code Academy <<no-reply@nebulacodeacademy.com>>"

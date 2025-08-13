@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env.production
+.env.staging
+.env.local
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store
+
+# Django
+/staticfiles/
+media/
+db.sqlite3
+
+# Node (if any)
+node_modules/
+
+# OS
+Thumbs.db
