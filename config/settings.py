@@ -96,6 +96,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 ROOT_URLCONF = 'config.urls'          # keep consistent with your project
 TEMPLATES = [
     {
