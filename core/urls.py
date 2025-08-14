@@ -1,6 +1,8 @@
 # core/urls.py
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from .views_smtp_test import smtp_test
+
 
 from .views import (
     RegisterAPIView,
@@ -30,5 +32,6 @@ urlpatterns = [
     # --- Password reset ---
     path("password-reset/", PasswordResetRequestAPIView.as_view(), name="password-reset-request"),
     path("password-reset-confirm/", PasswordResetConfirmAPIView.as_view(), name="password-reset-confirm"),
+    path("debug/smtp-test/", smtp_test, name="smtp-test"),
 ]
 

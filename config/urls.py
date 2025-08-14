@@ -20,6 +20,7 @@ from django.urls import path, include, re_path
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+
 def api_root(_):
     return JsonResponse({
         "name": "Nebula Code Academy API (staging)",
