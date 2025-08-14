@@ -44,8 +44,17 @@ ADMINS = [('Nebula Admin', 'admin@nebulacodeacademy.com')]
 SERVER_EMAIL = 'errors@nebulacodeacademy.com'
 
 # ───────────────────────────────── Hosts / CORS / CSRF
-ALLOWED_HOSTS = csv("ALLOWED_HOSTS", "localhost,127.0.0.1")
-CORS_ALLOWED_ORIGINS = csv("CORS_ALLOWED_ORIGINS", "http://localhost:3000")
+#ALLOWED_HOSTS = csv("ALLOWED_HOSTS", "localhost,127.0.0.1")
+ALLOWED_HOSTS = [
+    "api-staging.nebulacodeacademy.com",
+    "localhost",
+    "127.0.0.1",
+]
+#CORS_ALLOWED_ORIGINS = csv("CORS_ALLOWED_ORIGINS", "http://localhost:3000")
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
 CSRF_TRUSTED_ORIGINS = csv("CSRF_TRUSTED_ORIGINS")
 
 INSTALLED_APPS = [
