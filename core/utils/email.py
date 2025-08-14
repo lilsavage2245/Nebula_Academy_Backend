@@ -15,21 +15,6 @@ from core.utils.request import get_client_ip
 logger = logging.getLogger('core.email')
 success_logger = logging.getLogger('core.email.success')
 
-def _from_email():
-    """
-    Returns a proper 'From' value:
-    - If DEFAULT_FROM_EMAIL already looks like 'Name <email>', return it.
-    - Else, if EMAIL_SENDER_NAME is set, compose 'Name <email>'.
-    - Else, fallback to 'Nebula Code Academy <DEFAULT_FROM_EMAIL>'.
-    """
-    default_from = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@localhost")
-    # Already "Name <email>"? use as-is
-    if "<" in default_from and ">" in default_from:
-        return default_from
-    # Prefer configured sender name; else use brand fallback
-    sender_name = getattr(settings, "EMAIL_SENDER_NAME", "Nebula Code Academy")
-    return formataddr((sender_name, default_from))
-
 
 def send_verification_email(user, request):
     """
@@ -46,7 +31,14 @@ def send_verification_email(user, request):
     # Build the verification URL (expects a 'verify-email' named URL pattern)
     verification_path = reverse('verify-email')
 
-    # Build the absolute verification URL (keeps your existing logic)
+    # 🌍 Domain logic: use settings first, fallback to request, else localhost
+    domain = getattr(settings, "SITE_DOMAIN", None)
+    if not domain and request:
+        domain = request.get_host()
+    if not domain:
+        domain = "localhost:8000"  # fallback for dev/local testing
+
+    scheme = "https" if not settings.DEBUG else "http"
     verification_url = build_full_url(request, f"{verification_path}?uid={uid}&token={token}")
 
     subject = 'Verify your Nebula Code Academy account'
@@ -62,18 +54,20 @@ If you did not register, please ignore this email.
 """
 
     try:
+        # Send the verification email
+        from_email = formataddr((settings.EMAIL_SENDER_NAME, settings.DEFAULT_FROM_EMAIL))
         send_mail(
-            subject=subject,
-            message=message,
-            from_email=_from_email(),  # ✅ robust sender
-            recipient_list=[user.email],
+            subject,
+            message,
+            from_email,
+            [user.email],
             fail_silently=False,
         )
+        # Log success in case mail backend is silent
         success_logger.info(f"Verification email successfully sent to {user.email}")
     except Exception:
         logger.exception(f"Failed to send verification email to {user.email}")
         raise
-
 
 def send_password_reset_email(user, request):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -90,13 +84,8 @@ def send_password_reset_email(user, request):
     )
 
     try:
-        send_mail(
-            subject=subject,
-            message=message,
-            from_email=_from_email(),  # ✅ robust sender
-            recipient_list=[user.email],
-            fail_silently=False,
-        )
+        from_email = formataddr((getattr(settings, "EMAIL_SENDER_NAME", "NCA Team"), settings.DEFAULT_FROM_EMAIL))
+        send_mail(subject, message, from_email, [user.email], fail_silently=False)
         success_logger.info(f"Password reset email successfully sent to {user.email}")
     except Exception:
         logger.exception(f"Failed to send password reset email to {user.email}")
@@ -120,13 +109,11 @@ def send_password_changed_notification(user, request=None):
     )
 
     try:
-        send_mail(
-            subject=subject,
-            message=message,
-            from_email=_from_email(),  # ✅ robust sender
-            recipient_list=[user.email],
-            fail_silently=False,
-        )
+        from_email = formataddr((
+            getattr(settings, "EMAIL_SENDER_NAME", "Nebula Code Academy"),
+            settings.DEFAULT_FROM_EMAIL
+        ))
+        send_mail(subject, message, from_email, [user.email], fail_silently=False)
         success_logger.info(f"[EMAIL SENT] Password change notification sent to {user.email}")
     except Exception:
         logger.exception(f"[EMAIL ERROR] Failed to send password change notification to {user.email}")
