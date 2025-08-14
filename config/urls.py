@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import path, include
 from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 def api_root(_):
     return JsonResponse({
@@ -32,6 +33,10 @@ def api_root(_):
             "achievements": "/api/achievement/",
         }
     })
+
+@ensure_csrf_cookie
+def csrf_ping(_):
+    return JsonResponse({"ok": True})
 
 
 def health(_):
@@ -50,6 +55,7 @@ urlpatterns = [
     path("api/engagement/", include("engagement.urls")),
     path("health/", health),
     path("api/", api_root),  
+    path("csrf/", csrf_ping),
 
 ]
 
