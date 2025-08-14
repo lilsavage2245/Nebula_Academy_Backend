@@ -15,6 +15,8 @@ from core.utils.request import get_client_ip
 logger = logging.getLogger('core.email')
 success_logger = logging.getLogger('core.email.success')
 
+FRONTEND_URL = getattr(settings, "FRONTEND_URL", "http://localhost:3000")
+
 def _from_email():
     """
     Returns a proper 'From' value:
@@ -40,6 +42,8 @@ def send_verification_email(user, request):
         user: The user instance to verify.
         request: The current HTTP request, used to build an absolute URL.
     """
+    token = default_token_generator.make_token(user)
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
     # Create a one-time use token for email verification
     token = default_token_generator.make_token(user)
     # Encode the user's primary key
@@ -56,6 +60,9 @@ def send_verification_email(user, request):
 
     scheme = "https" if not settings.DEBUG else "http"
     verification_url = build_full_url(request, f"{verification_path}?uid={uid}&token={token}")
+
+    # Frontend link
+    verification_url = f"{FRONTEND_URL}/verify-email?uid={uid}&token={token}"
 
     subject = 'Verify your Nebula Code Academy account'
     message = f"""Hello {user.first_name},

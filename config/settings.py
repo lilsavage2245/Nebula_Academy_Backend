@@ -57,6 +57,15 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CSRF_TRUSTED_ORIGINS = csv("CSRF_TRUSTED_ORIGINS")
 
+# For local development
+FRONTEND_URL = "http://localhost:3000"
+
+# For staging, change this to your live site
+# FRONTEND_URL = "https://staging.nebulacodeacademy.com"
+
+# For production, change this to your live site
+# FRONTEND_URL = "https://nebulaacademy.com"
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
