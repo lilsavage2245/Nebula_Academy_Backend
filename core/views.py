@@ -1,3 +1,4 @@
+# core/views.py
 from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
@@ -152,3 +153,46 @@ class PasswordResetConfirmAPIView(APIView):
         result = serializer.save()
         return Response(result, status=status.HTTP_200_OK)
 
+# --- Me (whoami) + Logout (token-based) ---
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+class MeAPIView(APIView):
+    """
+    Return the current authenticated user's profile.
+    Token required: Authorization: Token <key>
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        u = request.user
+        data = {
+            "id": u.id,
+            "email": getattr(u, "email", ""),
+            "username": u.get_username(),
+            "first_name": getattr(u, "first_name", ""),
+            "last_name": getattr(u, "last_name", ""),
+            "is_staff": u.is_staff,
+            "is_superuser": u.is_superuser,
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class LogoutAPIView(APIView):
+    """
+    Invalidate the current token by deleting it (server-side logout).
+    Note: This style logs out only the token used in this request.
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        # delete the token presented in the Authorization header
+        try:
+            Token.objects.get(user=request.user, key=request.auth.key).delete()
+        except Exception:
+            # fall back: delete ALL tokens for the user (optional)
+            # Token.objects.filter(user=request.user).delete()
+            pass
+        return Response({"ok": True}, status=status.HTTP_200_OK)

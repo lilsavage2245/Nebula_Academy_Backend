@@ -14,9 +14,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# config/urls.py
 from django.contrib import admin
-from django.urls import path
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -25,9 +25,12 @@ def api_root(_):
         "name": "Nebula Code Academy API (staging)",
         "version": "0.1.0",
         "health": "/health/",
-        "docs": "/api/docs/",            # add later if you want
+        "docs": "/api/docs/",  # add later if you want
         "endpoints": {
-            "programs": "/api/programs/",    # adjust to your real paths
+            "me": "/api/me/",
+            "login (JWT)": "/api/token/",
+            "refresh (JWT)": "/api/token/refresh/",
+            "program": "/api/program/",
             "news": "/api/news/",
             "classes": "/api/classes/",
             "achievements": "/api/achievement/",
@@ -38,24 +41,27 @@ def api_root(_):
 def csrf_ping(_):
     return JsonResponse({"ok": True})
 
-
 def health(_):
     return JsonResponse({"status": "ok"})
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('core.urls')),
-    path('api/program/', include('program.urls')),
-    path('api/module/', include('module.urls')),
-    path('api/news/', include('news.urls')),
-    path('api/classes/', include('classes.urls')),
-    path('api/worksheet/', include('worksheet.urls')),
-    path('api/achievement/', include('achievement.urls')),
-    path('api/dashboard/', include('dashboard.urls')), 
-    path("api/engagement/", include("engagement.urls")),
+    path("admin/", admin.site.urls),
+
+    # Utilities / global endpoints
     path("health/", health),
-    path("api/", api_root),  
     path("csrf/", csrf_ping),
 
-]
+    # Exact API root BEFORE the includes
+    re_path(r"^api/$", api_root, name="api-root"),
 
+    # App routers
+    path("api/", include("core.urls")),          # contains /token/, /token/refresh/, /me/, etc.
+    path("api/program/", include("program.urls")),
+    path("api/module/", include("module.urls")),
+    path("api/news/", include("news.urls")),
+    path("api/classes/", include("classes.urls")),
+    path("api/worksheet/", include("worksheet.urls")),
+    path("api/achievement/", include("achievement.urls")),
+    path("api/dashboard/", include("dashboard.urls")),
+    path("api/engagement/", include("engagement.urls")),
+]
