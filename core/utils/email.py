@@ -15,6 +15,22 @@ from core.utils.request import get_client_ip
 logger = logging.getLogger('core.email')
 success_logger = logging.getLogger('core.email.success')
 
+def _from_email():
+    """
+    Returns a proper 'From' value:
+    - If DEFAULT_FROM_EMAIL already looks like 'Name <email>', return it.
+    - Else, if EMAIL_SENDER_NAME is set, compose 'Name <email>'.
+    - Else, fallback to 'Nebula Code Academy <DEFAULT_FROM_EMAIL>'.
+    """
+    default_from = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@localhost")
+    # Already "Name <email>"? use as-is
+    if "<" in default_from and ">" in default_from:
+        return default_from
+    # Prefer configured sender name; else use brand fallback
+    sender_name = getattr(settings, "EMAIL_SENDER_NAME", "Nebula Code Academy")
+    return formataddr((sender_name, default_from))
+
+
 
 def send_verification_email(user, request):
     """
