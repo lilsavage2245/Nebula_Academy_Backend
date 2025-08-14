@@ -70,20 +70,18 @@ If you did not register, please ignore this email.
 """
 
     try:
-        # Send the verification email
-        from_email = formataddr((settings.EMAIL_SENDER_NAME, settings.DEFAULT_FROM_EMAIL))
         send_mail(
-            subject,
-            message,
-            from_email,
-            [user.email],
+            subject=subject,
+            message=message,
+            from_email=_from_email(),  # ✅ robust sender
+            recipient_list=[user.email],
             fail_silently=False,
         )
-        # Log success in case mail backend is silent
         success_logger.info(f"Verification email successfully sent to {user.email}")
     except Exception:
         logger.exception(f"Failed to send verification email to {user.email}")
         raise
+
 
 def send_password_reset_email(user, request):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -100,8 +98,13 @@ def send_password_reset_email(user, request):
     )
 
     try:
-        from_email = formataddr((getattr(settings, "EMAIL_SENDER_NAME", "NCA Team"), settings.DEFAULT_FROM_EMAIL))
-        send_mail(subject, message, from_email, [user.email], fail_silently=False)
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=_from_email(),  # ✅ robust sender
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
         success_logger.info(f"Password reset email successfully sent to {user.email}")
     except Exception:
         logger.exception(f"Failed to send password reset email to {user.email}")
@@ -125,11 +128,13 @@ def send_password_changed_notification(user, request=None):
     )
 
     try:
-        from_email = formataddr((
-            getattr(settings, "EMAIL_SENDER_NAME", "Nebula Code Academy"),
-            settings.DEFAULT_FROM_EMAIL
-        ))
-        send_mail(subject, message, from_email, [user.email], fail_silently=False)
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=_from_email(),  # ✅ robust sender
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
         success_logger.info(f"[EMAIL SENT] Password change notification sent to {user.email}")
     except Exception:
         logger.exception(f"[EMAIL ERROR] Failed to send password change notification to {user.email}")
