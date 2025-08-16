@@ -57,11 +57,10 @@ CSRF_TRUSTED_ORIGINS = csv("CSRF_TRUSTED_ORIGINS")
 # For local development
 FRONTEND_URL = "http://localhost:3000"
 
-# For staging, change this to your live site
-# FRONTEND_URL = "https://staging.nebulacodeacademy.com"
-
-# For production, change this to your live site
-# FRONTEND_URL = "https://nebulaacademy.com"
+# Frontend base (used in emails)
+FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
+# Path for the verification page (keep one place of truth)
+FRONTEND_VERIFY_PATH = "/verify-email"
 
 INSTALLED_APPS = [
     'django.contrib.admin',

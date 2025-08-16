@@ -1,5 +1,7 @@
 # core/utils/email.py
 import logging
+from urllib.parse import urlencode
+
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
@@ -15,7 +17,9 @@ from core.utils.request import get_client_ip
 logger = logging.getLogger('core.email')
 success_logger = logging.getLogger('core.email.success')
 
-FRONTEND_URL = getattr(settings, "FRONTEND_URL", "http://localhost:3000")
+# Single source of truth for where the user should land to verify
+FRONTEND_URL = getattr(settings, "FRONTEND_URL", "http://localhost:3000").rstrip("/")
+VERIFY_PATH = "/verify-email"  # adjust if your FE route ever changes
 
 def _from_email():
     """
@@ -32,7 +36,9 @@ def _from_email():
     sender_name = getattr(settings, "EMAIL_SENDER_NAME", "Nebula Code Academy")
     return formataddr((sender_name, default_from))
 
-
+def _build_frontend_verify_url(uid: str, token: str) -> str:
+    qs = urlencode({"uid": uid, "token": token})
+    return f"{FRONTEND_URL}{VERIFY_PATH}?{qs}"
 
 def send_verification_email(user, request):
     """
@@ -42,27 +48,25 @@ def send_verification_email(user, request):
         user: The user instance to verify.
         request: The current HTTP request, used to build an absolute URL.
     """
-    token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
-    # Create a one-time use token for email verification
     token = default_token_generator.make_token(user)
-    # Encode the user's primary key
-    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    
     # Build the verification URL (expects a 'verify-email' named URL pattern)
-    verification_path = reverse('verify-email')
+    #verification_path = reverse('verify-email')
 
     # 🌍 Domain logic: use settings first, fallback to request, else localhost
-    domain = getattr(settings, "SITE_DOMAIN", None)
-    if not domain and request:
-        domain = request.get_host()
-    if not domain:
-        domain = "localhost:8000"  # fallback for dev/local testing
+    #domain = getattr(settings, "SITE_DOMAIN", None)
+    #if not domain and request:
+        #domain = request.get_host()
+    #if not domain:
+        #domain = "localhost:8000"  # fallback for dev/local testing
 
-    scheme = "https" if not settings.DEBUG else "http"
-    verification_url = build_full_url(request, f"{verification_path}?uid={uid}&token={token}")
+    #scheme = "https" if not settings.DEBUG else "http"
+    #verification_url = build_full_url(request, f"{verification_path}?uid={uid}&token={token}")
+    verification_url = _build_frontend_verify_url(uid, token)
 
     # Frontend link
-    verification_url = f"{FRONTEND_URL}/verify-email?uid={uid}&token={token}"
+    #verification_url = f"{FRONTEND_URL}/verify-email?uid={uid}&token={token}"
 
     subject = 'Verify your Nebula Code Academy account'
     message = f"""Hello {user.first_name},
@@ -90,11 +94,18 @@ If you did not register, please ignore this email.
         raise
 
 
+RESET_PATH = "/reset-password"  # your FE route
+
+def _build_frontend_reset_url(uid: str, token: str) -> str:
+    qs = urlencode({"uid": uid, "token": token})
+    return f"{FRONTEND_URL}{RESET_PATH}?{qs}"
+
 def send_password_reset_email(user, request):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
-    reset_path = reverse('password-reset-confirm')
-    reset_url = build_full_url(request, f"{reset_path}?uid={uid}&token={token}")
+    #reset_path = reverse('password-reset-confirm')
+    #reset_url = build_full_url(request, f"{reset_path}?uid={uid}&token={token}")
+    reset_url = _build_frontend_reset_url(uid, token)
 
     subject = "Reset your password - Nebula Code Academy"
     message = (
