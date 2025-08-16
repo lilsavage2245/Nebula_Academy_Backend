@@ -306,3 +306,8 @@ LOGGING = {
         'django.request': {'handlers': ['console'], 'level': 'ERROR', 'propagate': False},
     },
 }
+
+POLICY_VERSIONS = {
+    "terms": "2025-08",      # your current published terms version/tag
+    "privacy": "2025-08",    # your current privacy policy version/tag
+}
