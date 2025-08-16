@@ -16,6 +16,7 @@ from people.models import OnboardingSurvey, AgeRange, ReferralSource
 
 
 from core.utils.request import get_client_ip
+from django.conf import settings
 
 import logging
 
@@ -65,9 +66,17 @@ class OnboardingSurveyInputSerializer(serializers.Serializer):
     motivation_text = serializers.CharField(required=False, allow_blank=True)
     referral_source = serializers.ChoiceField(choices=ReferralSource.choices, required=False, allow_null=True)
 
+    # ✅ Consents (backend-enforced)
     accept_terms = serializers.BooleanField(required=True)
-    email_opt_in = serializers.BooleanField(required=False, default=False)
+    accept_privacy = serializers.BooleanField(required=True)  # NEW
     info_accuracy_confirmed = serializers.BooleanField(required=True)
+
+    email_opt_in = serializers.BooleanField(required=False, default=False)
+
+    # Optional: allow FE to send explicit versions; otherwise we'll fill from settings
+    terms_version = serializers.CharField(required=False, allow_blank=True)
+    privacy_version = serializers.CharField(required=False, allow_blank=True)
+
 
     utm = serializers.DictField(required=False)
 
@@ -112,17 +121,19 @@ class RegisterSerializer(serializers.ModelSerializer):
                 errors['program_category'] = 'Free students must have a Program Category (e.g., BEG for Beginner).'
 
         # Onboarding rules for FREE users (you can relax or extend this for other roles later)
-        if role == UserModel.Roles.FREE:
+        if attrs.get('role') == 'FREE':
             if not onboarding:
-                errors['onboarding'] = 'Onboarding data is required for FREE users.'
-            else:
-                if onboarding.get('accept_terms') is not True:
-                    errors['onboarding.accept_terms'] = 'You must accept terms and conditions.'
-                if onboarding.get('info_accuracy_confirmed') is not True:
-                    errors['onboarding.info_accuracy_confirmed'] = 'Please confirm the information is accurate.'
+                raise serializers.ValidationError({"onboarding": "Onboarding data is required for FREE users."})
 
-        if errors:
-            raise serializers.ValidationError(errors)
+            if onboarding.get('accept_terms') is not True:
+                raise serializers.ValidationError({"onboarding.accept_terms": "You must accept the Terms & Conditions."})
+
+            if onboarding.get('accept_privacy') is not True:
+                raise serializers.ValidationError({"onboarding.accept_privacy": "You must accept the Privacy Policy."})
+
+            if onboarding.get('info_accuracy_confirmed') is not True:
+                raise serializers.ValidationError({"onboarding.info_accuracy_confirmed": "Please confirm the information is accurate."})
+
         return attrs
 
     def create(self, validated_data):
@@ -144,26 +155,44 @@ class RegisterSerializer(serializers.ModelSerializer):
             referral_source = onboarding.get('referral_source') or ""
             phone = onboarding.get('phone', "").strip()
             country = onboarding.get('country', "").strip()
+            # derive versions (prefer FE payload; else settings; else blank)
+            policy = getattr(settings, "POLICY_VERSIONS", {"terms": "", "privacy": ""})
+            terms_ver = onboarding.get("terms_version") or policy.get("terms", "")
+            privacy_ver = onboarding.get("privacy_version") or policy.get("privacy", "")
+
+            now = timezone.now()  # stamp acceptance times if accepted
+            terms_at = now if onboarding.get("accept_terms") else None
+            privacy_at = now if onboarding.get("accept_privacy") else None
+
 
             # Mark any previous latest as false (usually none at registration)
             OnboardingSurvey.objects.filter(user=user, is_latest=True).update(is_latest=False)
 
             OnboardingSurvey.objects.create(
                 user=user,
-                age_range=age_range,
-                phone=phone,
-                country=country,
+                age_range=onboarding.get('age_range') or "",
+                phone=onboarding.get('phone', ""),
+                country=onboarding.get('country', ""),
                 interest_areas=onboarding.get('interest_areas', []),
                 motivation_text=onboarding.get('motivation_text', ""),
-                referral_source=referral_source,
+                referral_source=onboarding.get('referral_source') or "",
+
                 accept_terms=bool(onboarding.get('accept_terms')),
+                terms_version=terms_ver,
+                terms_accepted_at=terms_at,
+
+                accept_privacy=bool(onboarding.get('accept_privacy')),
+                privacy_version=privacy_ver,
+                privacy_accepted_at=privacy_at,
+
                 email_opt_in=bool(onboarding.get('email_opt_in', False)),
                 info_accuracy_confirmed=bool(onboarding.get('info_accuracy_confirmed')),
+
                 utm=onboarding.get('utm', {}),
                 is_latest=True,
             )
 
-        # Fire your existing verification signal
+        #  verification signal
         request = self.context.get('request')
         if request:
             from core.signals import user_registered

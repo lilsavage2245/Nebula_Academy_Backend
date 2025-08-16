@@ -51,11 +51,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
 ]
 #CORS_ALLOWED_ORIGINS = csv("CORS_ALLOWED_ORIGINS", "http://localhost:3000")
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:8000"
-]
+CORS_ALLOWED_ORIGINS = csv("CORS_ALLOWED_ORIGINS")
 CSRF_TRUSTED_ORIGINS = csv("CSRF_TRUSTED_ORIGINS")
 
 # For local development
@@ -115,7 +111,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-CORS_ALLOW_CREDENTIALS = True  # ← required for cookies
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = ["*"]
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 STATIC_URL = "/static/"

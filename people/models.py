@@ -55,7 +55,14 @@ class OnboardingSurvey(models.Model):
 
     # Consents
     accept_terms = models.BooleanField(default=False)
-    email_opt_in = models.BooleanField(default=False)                   # subscribe to updates
+    terms_version = models.CharField(max_length=20, blank=True)           # e.g. "2025-08"
+    terms_accepted_at = models.DateTimeField(null=True, blank=True)
+
+    accept_privacy = models.BooleanField(default=False)                   # NEW
+    privacy_version = models.CharField(max_length=20, blank=True)         # e.g. "2025-08"
+    privacy_accepted_at = models.DateTimeField(null=True, blank=True)
+
+    email_opt_in = models.BooleanField(default=False)                     # subscribe to updates
     info_accuracy_confirmed = models.BooleanField(default=False)
 
     # Governance & analytics
@@ -72,6 +79,15 @@ class OnboardingSurvey(models.Model):
 
     def __str__(self):
         return f"OnboardingSurvey({self.user.email}, {self.created_at:%Y-%m-%d})"
+    
+    def mark_consent_timestamps(self):
+        from django.utils import timezone
+        now = timezone.now()
+        if self.accept_terms and not self.terms_accepted_at:
+            self.terms_accepted_at = now
+        if self.accept_privacy and not self.privacy_accepted_at:
+            self.privacy_accepted_at = now
+
 
 
 class BaseProfile(SlugModelMixin, models.Model):

@@ -128,15 +128,17 @@ class OnboardingSurveyAdmin(admin.ModelAdmin):
         "country",
         "referral_source",
         "age_range",
-        "is_latest",
         "accept_terms",
+        "accept_privacy",
         "email_opt_in",
+        "is_latest",
     )
     list_filter = (
         "is_latest",
         "referral_source",
         "age_range",
         "accept_terms",
+        "accept_privacy",
         "email_opt_in",
         "created_at",
     )
@@ -149,6 +151,25 @@ class OnboardingSurveyAdmin(admin.ModelAdmin):
         "country",
     )
     autocomplete_fields = ("user",)
-    readonly_fields = ("created_at",)
+    readonly_fields = ("created_at", "terms_accepted_at", "privacy_accepted_at")
+    fieldsets = (
+        ("User & Timing", {
+            "fields": ("user", "created_at", "is_latest")
+        }),
+        ("Profile", {
+            "fields": ("age_range", "phone", "country", "interest_areas", "motivation_text", "referral_source")
+        }),
+        ("Consents", {
+            "fields": (
+                "accept_terms", "terms_version", "terms_accepted_at",
+                "accept_privacy", "privacy_version", "privacy_accepted_at",
+                "email_opt_in", "info_accuracy_confirmed",
+            )
+        }),
+        ("Analytics", {
+            "classes": ("collapse",),
+            "fields": ("utm",),
+        }),
+    )
     ordering = ("-created_at",)
 
