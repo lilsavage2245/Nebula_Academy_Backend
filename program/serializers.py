@@ -1,6 +1,6 @@
 # program/serializers.py
 from rest_framework import serializers
-from .models import Program, ProgramLevel, Session, Certificate, ProgramCategory
+from .models import Program, ProgramLevel, Session, ProgramCategory
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -43,27 +43,7 @@ class SessionSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id']
 
-# -- Certificate Serializer with write support --
-class CertificateSerializer(serializers.ModelSerializer):
-    program = serializers.StringRelatedField(read_only=True)
-    program_id = serializers.PrimaryKeyRelatedField(
-        source='program', queryset=Program.objects.all(), write_only=True
-    )
 
-    class Meta:
-        model = Certificate
-        fields = [
-            'id',
-            'program',
-            'program_id',
-            'title',
-            'description',
-            'criteria',
-            'template_file',
-            'created_at',
-            'updated_at',
-        ]
-        read_only_fields = ['created_at', 'updated_at']
 
 # -- Main Program Serializer --
 class ProgramSerializer(serializers.ModelSerializer):
@@ -75,7 +55,6 @@ class ProgramSerializer(serializers.ModelSerializer):
     )
     category_display = serializers.CharField(source='get_category_display', read_only=True)
     levels = ProgramLevelSerializer(many=True, read_only=True)
-    certificate = CertificateSerializer(read_only=True)
 
     class Meta:
         model = Program
@@ -91,7 +70,6 @@ class ProgramSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'levels',
-            'certificate',
         ]
         read_only_fields = ['slug', 'created_at', 'updated_at']
 

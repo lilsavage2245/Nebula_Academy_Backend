@@ -6,7 +6,6 @@ from .views import (
     ProgramViewSet,
     ProgramLevelViewSet,
     SessionViewSet,
-    CertificateViewSet,
     ProgramCategoryListView,
 )
 
@@ -14,7 +13,6 @@ from .views import (
 router = DefaultRouter()
 router.register(r'programs', ProgramViewSet, basename='program')
 router.register(r'sessions', SessionViewSet, basename='session')  # optional flat route
-router.register(r'certificates', CertificateViewSet, basename='certificate')
 
 # Nested: levels under programs
 program_router = NestedSimpleRouter(router, r'programs', lookup='program')

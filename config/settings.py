@@ -54,6 +54,7 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://127.0.0.1:8000"
 ]
 CSRF_TRUSTED_ORIGINS = csv("CSRF_TRUSTED_ORIGINS")
 
@@ -97,6 +98,8 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'badgetasks.apps.BadgetasksConfig',
     'engagement',  # ensure this is a valid app module
+    'application.apps.ApplicationConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -213,25 +216,40 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# If you later add media storage (Cloudinary/S3), configure here.
+# --- STAGING/PRODUCTION (keep strict) ---
+if ENV in ("staging", "production"):
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    USE_X_FORWARDED_HOST = True
 
-# ───────────────────────────────── Security / HTTPS
-# Respect X-Forwarded-Proto from Railway/Render
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SAMESITE = "Lax"
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = "Lax"
+    CSRF_COOKIE_SAMESITE = "Lax"
 
-# ✅ NEW: make cookies valid on your subdomain
-SESSION_COOKIE_DOMAIN = ".nebulacodeacademy.com"
-CSRF_COOKIE_DOMAIN = ".nebulacodeacademy.com"
+    # Cookies scoped to your domain in hosted envs only
+    SESSION_COOKIE_DOMAIN = ".nebulacodeacademy.com"
+    CSRF_COOKIE_DOMAIN = ".nebulacodeacademy.com"
 
-# Defaults; tighten in staging/prod
-#SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'false').lower() == 'true'
-#CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'false').lower() == 'true'
-SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'false').lower() == 'true'
+    SECURE_SSL_REDIRECT = True
+
+# --- LOCAL (make cookies work on http://localhost) ---
+else:
+    SECURE_PROXY_SSL_HEADER = None
+    USE_X_FORWARDED_HOST = False
+
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SAMESITE = "Lax"
+    CSRF_COOKIE_SAMESITE = "Lax"
+
+    # IMPORTANT: no cookie domain for localhost
+    SESSION_COOKIE_DOMAIN = None
+    CSRF_COOKIE_DOMAIN = None
+
+    SECURE_SSL_REDIRECT = False
+
+    # Ensure the default auth backend is enabled
+    AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",  # must be present for admin

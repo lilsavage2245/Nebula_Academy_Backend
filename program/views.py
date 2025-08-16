@@ -7,12 +7,11 @@ from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .models import Program, ProgramLevel, Session, Certificate, ProgramCategory
+from .models import Program, ProgramLevel, Session, ProgramCategory
 from .serializers import (
     ProgramSerializer,
     ProgramLevelSerializer,
     SessionSerializer,
-    CertificateSerializer,
     ProgramCategorySerializer,
 )
 
@@ -28,7 +27,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
 # --- Program ViewSet ---
 class ProgramViewSet(viewsets.ModelViewSet):
-    queryset = Program.objects.select_related('director').prefetch_related('levels', 'certificate')
+    queryset = Program.objects.select_related('director').prefetch_related('levels')
     serializer_class = ProgramSerializer
     permission_classes = [IsAdminOrReadOnly]
     lookup_field = 'slug'
@@ -147,20 +146,6 @@ class SessionViewSet(viewsets.ModelViewSet):
 
 
 
-# --- Certificate ViewSet ---
-class CertificateViewSet(viewsets.ModelViewSet):
-    queryset = Certificate.objects.select_related('program')
-    serializer_class = CertificateSerializer
-    permission_classes = [IsAdminOrReadOnly]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'description']
-    ordering_fields = ['created_at']
-
-    def get_queryset(self):
-        program_slug = self.request.query_params.get('program')
-        if program_slug:
-            return self.queryset.filter(program__slug=program_slug)
-        return self.queryset
 
 
 # --- Public: Program Category List View ---

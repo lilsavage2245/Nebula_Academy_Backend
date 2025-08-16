@@ -1,7 +1,7 @@
 # program/admin.py
 from django import forms
 from django.contrib import admin
-from .models import Program, ProgramLevel, Session, Certificate, ProgramCategory
+from .models import Program, ProgramLevel, Session, ProgramCategory
 
 
 class ProgramAdminForm(forms.ModelForm):
@@ -45,7 +45,7 @@ class ProgramLevelAdmin(admin.ModelAdmin):
 class SessionAdmin(admin.ModelAdmin):
     list_display = ('title', 'mode', 'start_datetime', 'level', 'level_program')
     list_filter = ('mode', 'level__program')
-    search_fields = ('title', 'level')
+    search_fields = ('title', 'level__title', 'level__program__name')  # ← updated
     list_select_related = ('level',)
     ordering = ('start_datetime',)
 
@@ -54,15 +54,4 @@ class SessionAdmin(admin.ModelAdmin):
     level_program.short_description = 'Program'
 
 
-@admin.register(Certificate)
-class CertificateAdmin(admin.ModelAdmin):
-    list_display = ('program', 'title', 'created_at', 'template_preview')
-    search_fields = ('title', 'description', 'program__name')
-    list_filter = ('program',)
-    raw_id_fields = ('program',)
-    readonly_fields = ('created_at', 'updated_at')
-    ordering = ('-created_at',)
 
-    def template_preview(self, obj):
-        return "✅ Uploaded" if obj.template_file else "—"
-    template_preview.short_description = "Template"

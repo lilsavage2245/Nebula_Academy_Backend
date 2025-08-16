@@ -83,31 +83,3 @@ class Session(models.Model):
         return f"{self.level.program.name} — {self.title} on {self.start_datetime:%Y-%m-%d %H:%M}"
 
 
-class Certificate(models.Model):
-    program            = models.OneToOneField(
-        Program,
-        on_delete=models.CASCADE,
-        related_name='certificate'
-    )
-    title              = models.CharField(max_length=150)
-    description        = models.TextField(blank=True)
-    criteria           = models.JSONField(
-        default=dict,
-        help_text='Achievement criteria, e.g., module completions or exams'
-    )
-    template_file      = models.FileField(
-        upload_to='certificates/',
-        null=True,
-        blank=True,
-        help_text='Base PDF/HTML template for certificate generation'
-    )
-    created_at         = models.DateTimeField(auto_now_add=True)
-    updated_at         = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'Certificate'
-        verbose_name_plural = 'Certificates'
-
-
-    def __str__(self):
-        return f"Certificate for {self.program}"

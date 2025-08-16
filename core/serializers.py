@@ -12,6 +12,8 @@ from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from program.models import ProgramLevel, ProgramCategory
+from people.models import OnboardingSurvey, AgeRange, ReferralSource
+
 
 from core.utils.request import get_client_ip
 
@@ -53,9 +55,25 @@ class UserSerializer(serializers.ModelSerializer):
             instance.save()
             return instance
 
+class OnboardingSurveyInputSerializer(serializers.Serializer):
+    age_range = serializers.ChoiceField(choices=AgeRange.choices, required=False, allow_null=True)
+    phone = serializers.CharField(required=False, allow_blank=True)
+    country = serializers.CharField(required=False, allow_blank=True)
+    interest_areas = serializers.ListField(
+        child=serializers.CharField(), required=False, allow_empty=True
+    )
+    motivation_text = serializers.CharField(required=False, allow_blank=True)
+    referral_source = serializers.ChoiceField(choices=ReferralSource.choices, required=False, allow_null=True)
+
+    accept_terms = serializers.BooleanField(required=True)
+    email_opt_in = serializers.BooleanField(required=False, default=False)
+    info_accuracy_confirmed = serializers.BooleanField(required=True)
+
+    utm = serializers.DictField(required=False)
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
+    onboarding = OnboardingSurveyInputSerializer(required=False)
 
     # allow these on create
     program_level = serializers.PrimaryKeyRelatedField(
@@ -71,14 +89,21 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserModel
-        fields = ['email', 'first_name', 'last_name', 'password', 'role', 'program_level', 'program_category']
+        fields = [
+            'email', 'first_name', 'last_name', 'password', 'role',
+            'program_level', 'program_category',
+            'onboarding',
+        ]
 
     def validate(self, attrs):
         role = attrs.get('role')
         program_level = attrs.get('program_level')
         program_category = attrs.get('program_category')
+        onboarding = attrs.get('onboarding')
 
         errors = {}
+
+        # Placement rules
         if role == UserModel.Roles.ENROLLED:
             if not program_level:
                 errors['program_level'] = 'Enrolled students must have a Program Level (e.g., Beginner Level 1).'
@@ -86,20 +111,64 @@ class RegisterSerializer(serializers.ModelSerializer):
             if not program_category:
                 errors['program_category'] = 'Free students must have a Program Category (e.g., BEG for Beginner).'
 
+        # Onboarding rules for FREE users (you can relax or extend this for other roles later)
+        if role == UserModel.Roles.FREE:
+            if not onboarding:
+                errors['onboarding'] = 'Onboarding data is required for FREE users.'
+            else:
+                if onboarding.get('accept_terms') is not True:
+                    errors['onboarding.accept_terms'] = 'You must accept terms and conditions.'
+                if onboarding.get('info_accuracy_confirmed') is not True:
+                    errors['onboarding.info_accuracy_confirmed'] = 'Please confirm the information is accurate.'
+
         if errors:
             raise serializers.ValidationError(errors)
         return attrs
 
     def create(self, validated_data):
         password = validated_data.pop('password')
+        onboarding = validated_data.pop('onboarding', None)
 
-        # If ENROLLED and level provided, mirror the category into program_category
+        # Mirror category from level for ENROLLED
         role = validated_data.get('role')
         level = validated_data.get('program_level')
         if role == UserModel.Roles.ENROLLED and level:
             validated_data['program_category'] = level.program.category
 
         user = UserModel.objects.create_user(password=password, **validated_data)
+
+        # Persist onboarding survey (if provided)
+        if onboarding:
+            # Optional normalization
+            age_range = onboarding.get('age_range') or ""
+            referral_source = onboarding.get('referral_source') or ""
+            phone = onboarding.get('phone', "").strip()
+            country = onboarding.get('country', "").strip()
+
+            # Mark any previous latest as false (usually none at registration)
+            OnboardingSurvey.objects.filter(user=user, is_latest=True).update(is_latest=False)
+
+            OnboardingSurvey.objects.create(
+                user=user,
+                age_range=age_range,
+                phone=phone,
+                country=country,
+                interest_areas=onboarding.get('interest_areas', []),
+                motivation_text=onboarding.get('motivation_text', ""),
+                referral_source=referral_source,
+                accept_terms=bool(onboarding.get('accept_terms')),
+                email_opt_in=bool(onboarding.get('email_opt_in', False)),
+                info_accuracy_confirmed=bool(onboarding.get('info_accuracy_confirmed')),
+                utm=onboarding.get('utm', {}),
+                is_latest=True,
+            )
+
+        # Fire your existing verification signal
+        request = self.context.get('request')
+        if request:
+            from core.signals import user_registered
+            user_registered.send(sender=self.__class__, user=user, request=request)
+
         return user
 
 class ResendVerificationSerializer(serializers.Serializer):
