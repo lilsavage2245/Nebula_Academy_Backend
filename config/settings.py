@@ -54,8 +54,11 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = csv("CORS_ALLOWED_ORIGINS")
 CSRF_TRUSTED_ORIGINS = csv("CSRF_TRUSTED_ORIGINS")
 
-# For local development
-FRONTEND_URL = "http://localhost:3000"
+FRONTEND_URL = (
+    os.getenv("FRONTEND_URL")
+    or os.getenv("FRONTEND_ORIGIN")  # fallback if you’ve set this one already
+    or ("https://staging.nebulacodeacademy.com" if ENV == "staging" else "http://localhost:3000")
+)
 
 # Frontend base (used in emails)
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
