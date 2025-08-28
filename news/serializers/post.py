@@ -17,7 +17,7 @@ class NewsPostSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'slug',
             'author', 'category',
-            'summary', 'content', 'image', 'tags',
+            'summary', 'content', 'content_html', 'image', 'tags',
             'status', 'status_display', 'is_visible',
             'allow_comments', 'view_count',
             'meta_title', 'meta_description',

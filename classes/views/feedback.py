@@ -2,11 +2,11 @@
 from rest_framework import viewsets, permissions, filters
 from rest_framework.exceptions import PermissionDenied
 
-from classes.models import LessonComment, LessonReply, LessonRating
+from classes.models import LessonComment, LessonRating
 from classes.serializers.feedback import (
     LessonCommentSerializer,
-    LessonReplySerializer,
-    LessonRatingSerializer
+    LessonRatingSerializer,
+    LessonCommentCreateSerializer
 )
 from .base import (
     SoftDeleteMixin,
@@ -15,47 +15,41 @@ from .base import (
 )
 
 
-class LessonCommentViewSet(
-    SoftDeleteMixin,
-    DynamicSerializerMixin,
-    FilteredLessonQuerysetMixin,
-    viewsets.ModelViewSet
-):
+class LessonCommentViewSet(SoftDeleteMixin, viewsets.ModelViewSet):
     """
-    Allows users to comment on lessons. Comments are disabled per lesson setting.
+    Threaded comments:
+    - POST with {lesson, content} to add a root comment.
+    - POST with {lesson, parent, content} to reply to any comment.
+    - GET lists comments; use ?lesson=<id|slug> to filter.
     """
-    queryset = LessonComment.objects.select_related('lesson', 'user').prefetch_related('replies')
-    serializer_class = LessonCommentSerializer
-    write_serializer_class = LessonCommentSerializer
+    queryset = LessonComment.objects.select_related('user', 'lesson').prefetch_related('replies')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['created_at']
-    ordering = ['-created_at']
-
-    def perform_create(self, serializer):
-        lesson = serializer.validated_data['lesson']
-        if not lesson.allow_comments:
-            raise PermissionDenied("Comments are not allowed for this lesson.")
-        serializer.save(user=self.request.user)
-
-
-class LessonReplyViewSet(
-    SoftDeleteMixin,
-    DynamicSerializerMixin,
-    viewsets.ModelViewSet
-):
-    """
-    Allows users to reply to lesson comments.
-    """
-    queryset = LessonReply.objects.select_related('parent_comment', 'user')
-    serializer_class = LessonReplySerializer
-    write_serializer_class = LessonReplySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['created_at']
     ordering = ['created_at']
 
+    def get_serializer_class(self):
+        return LessonCommentCreateSerializer if self.action in ['create', 'update', 'partial_update'] \
+               else LessonCommentSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        lesson = self.request.query_params.get('lesson')
+        root_only = self.request.query_params.get('root_only')
+        if lesson:
+            # Accept id or slug; adjust to your actual lesson lookup
+            if lesson.isdigit():
+                qs = qs.filter(lesson_id=int(lesson))
+            else:
+                qs = qs.filter(lesson__slug=lesson)
+        if root_only in ('1', 'true', 'True'):
+            qs = qs.filter(parent__isnull=True)
+        return qs
+
     def perform_create(self, serializer):
+        # If lesson disallows comments, enforce here if you track allow_comments per lesson
+        lesson = serializer.validated_data['lesson']
+        if hasattr(lesson, 'allow_comments') and not lesson.allow_comments:
+            raise PermissionDenied("Comments are not allowed for this lesson.")
         serializer.save(user=self.request.user)
 
 

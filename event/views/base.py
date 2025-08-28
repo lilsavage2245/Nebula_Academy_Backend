@@ -2,6 +2,8 @@
 from rest_framework import permissions
 from rest_framework.exceptions import PermissionDenied
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
+from event.models import Event
 
 from event.models.base import EventStatus
 
@@ -61,3 +63,26 @@ class EventQueryParamMixin:
         if event_slug:
             return Event.objects.filter(slug=event_slug).first()
         return None
+
+class EventScopedQuerysetMixin:
+    """
+    If this view is nested under /events/<slug>/..., restrict queryset to that event.
+    Works with rest_framework_nested.* where the kwarg is 'event_pk'.
+    If your EventViewSet.lookup_field='slug', event_pk is the slug.
+    """
+    event_lookup_url_kwarg = 'event_pk'  # from NestedDefaultRouter
+    event_lookup_field = 'slug'          # must match EventViewSet.lookup_field
+
+    def get_event(self):
+        event_key = self.kwargs.get(self.event_lookup_url_kwarg)
+        if not event_key:
+            return None
+        lookup = {self.event_lookup_field: event_key}
+        return get_object_or_404(Event, **lookup)
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        event = self.get_event()
+        if event is not None:
+            qs = qs.filter(event=event)
+        return qs

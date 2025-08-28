@@ -3,7 +3,7 @@
 from django.contrib import admin
 from classes.models import (
     Lesson, LessonMaterial,
-    LessonComment, LessonReply, LessonRating,
+    LessonComment, LessonRating,
     LessonAttendance, LessonQuiz, LessonQuizAnswer,
     LessonQuizResult, LessonQuizQuestion
 )
@@ -20,20 +20,20 @@ class LessonMaterialInline(admin.TabularInline):
 
 
 class LessonCommentInline(admin.TabularInline):
+    """
+    Show ONLY root comments (parent is null) under a Lesson.
+    Replies are managed on the comment change page via LessonCommentChildInline.
+    """
     model = LessonComment
     extra = 0
     fields = ('user', 'content', 'created_at')
     readonly_fields = ('created_at',)
-    show_change_link = True
     autocomplete_fields = ('user',)
+    show_change_link = True
 
-
-class LessonReplyInline(admin.TabularInline):
-    model = LessonReply
-    extra = 0
-    fields = ('user', 'parent_comment', 'content', 'created_at')
-    readonly_fields = ('created_at',)
-    autocomplete_fields = ('user', 'parent_comment')
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(parent__isnull=True)
 
 
 class LessonRatingInline(admin.TabularInline):
@@ -133,22 +133,29 @@ class LessonMaterialAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)
 
 
+# --- Threaded Comments Admin ---
+
+class LessonCommentChildInline(admin.TabularInline):
+    """
+    Shows direct children (replies) for a given comment on its change page.
+    """
+    model = LessonComment
+    fk_name = 'parent'
+    extra = 0
+    fields = ('user', 'content', 'created_at')
+    readonly_fields = ('created_at',)
+    autocomplete_fields = ('user',)
+    show_change_link = True
+
+
 @admin.register(LessonComment)
 class LessonCommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'lesson', 'created_at')
+    list_display = ('user', 'lesson', 'parent', 'created_at')
     search_fields = ('content', 'user__email', 'lesson__title')
     readonly_fields = ('created_at',)
-    autocomplete_fields = ('user', 'lesson')
-    ordering = ('-created_at',)
-
-
-@admin.register(LessonReply)
-class LessonReplyAdmin(admin.ModelAdmin):
-    list_display = ('user', 'parent_comment', 'created_at')
-    search_fields = ('content', 'user__email', 'parent_comment__lesson__title')
-    readonly_fields = ('created_at',)
-    autocomplete_fields = ('user', 'parent_comment')
+    autocomplete_fields = ('user', 'lesson', 'parent')
     ordering = ('created_at',)
+    inlines = [LessonCommentChildInline]
 
 
 @admin.register(LessonRating)

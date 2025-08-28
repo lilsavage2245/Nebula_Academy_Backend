@@ -1,0 +1,96 @@
+lessons:
+  - slug: "python-basics-101"
+    created_by: v.okoye@lecturer.nebulacodeacademy.com
+    title: "Python Basics 101"
+    description: "Intro to Python: print, variables, operations."
+    date: "2025-08-10T10:00:00Z"
+    delivery: "REC"             # LIVE | REC | HYBRID
+    audience: "BOTH"            # FREE | ENROLLED | BOTH | STAFF | ALL (if you use ALL)
+    is_published: true
+    duration_minutes: 45
+    program_level_slug: "pre-academy-program-pre-level-1-introduction-exploration"          # <-- put your actual ProgramLevel slug
+    module_slug: "programming-fundamentals"       # <-- put your actual Module slug
+
+    video_embed_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    worksheet_link: "https://cdn.example.com/worksheets/py101.pdf"
+
+    materials:
+      - title: "Slides v1"
+        material_type: "PDF"       # PDF | LINK | VIDEO | DOC | ZIP
+        file_path: "seeds/slides/py101.pdf"   # <-- local path to attach
+        version: 1
+        audience: "BOTH"
+        uploaded_by: "v.okoye@lecturer.nebulacodeacademy.com"
+
+      - title: "Reference Links"
+        material_type: "LINK"
+        #url: "https://docs.python.org/3/tutorial" 
+        url: "https://www.canva.com/design/DAGwehWXxtY/5-SgEE5lq9MNn4OtU7H7Qg/edit?utm_content=DAGwehWXxtY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+        version: 1
+        audience: "BOTH"
+        uploaded_by: "v.okoye@lecturer.nebulacodeacademy.com"
+
+    # Threaded comments (arbitrary depth)
+    comments:
+      - user: "efeminiedeawor@gmail.com"
+        content: "Great intro!"
+        replies:
+          - user: "v.okoye@lecturer.nebulacodeacademy.com"
+            content: "Thanks Efemini!"
+            replies:
+              - user: "efeminiedeawor@gmail.com"
+                content: "When will we cover f-strings?"
+                replies:
+                  - user: "v.okoye@lecturer.nebulacodeacademy.com"
+                    content: "Lesson 2 — stay tuned."
+
+    ratings:
+      - user: "efeminiedeawor@gmail.com"
+        score: 5
+        review: "Clear and concise."
+
+      - user: "o.onye@student.nebulacodeacademy.com"
+        score: 4
+        review: "Very helpful."
+
+    attendance:
+      - user: "efeminiedeawor@gmail.com"
+        attended: true
+        timestamp: "2025-08-10T10:50:00Z"
+
+      - user: "o.onye@student.nebulacodeacademy.com"
+        attended: true
+        timestamp: "2025-08-10T10:55:00Z"
+
+    quizzes:
+      - title: "Intro to Python Quiz"
+        description: "Basics check"
+        is_active: true
+        questions:
+          - text: "What does print() do?"
+            choices: ["Runs code", "Outputs text", "Compiles"]
+            correct_answer: "Outputs text"
+
+          - text: "2 + 3 * 4 = ?"
+            choices: ["14", "20", "24"]
+            correct_answer: "14"
+
+  - slug: "django-models-201"
+    created_by: i.uche@lecturer.nebulacodeacademy.com
+    title: "Django Models 201"
+    description: "Fields, relationships, and migrations."
+    date: "2025-08-12T18:00:00Z"
+    delivery: "LIVE"
+    audience: "ENROLLED"
+    is_published: false
+    duration_minutes: 60
+    program_level_slug: "pre-academy-program-pre-level-1-introduction-exploration"      # <-- put your actual ProgramLevel slug
+    module_slug: "web-development-basics"              # <-- put your actual Module slug
+
+    materials:
+      - title: "ERD Diagram"
+        material_type: "DOC"
+        url: "https://cdn.example.com/erd/models201.docx"
+        version: 1
+        audience: "ENROLLED"
+        uploaded_by: "i.uche@lecturer.nebulacodeacademy.com"

@@ -7,10 +7,10 @@ from event.serializers.speaker import (
     EventSpeakerSerializer,
     EventSpeakerCreateSerializer
 )
-from .base import DynamicSerializerMixin, IsAdminOrReadOnly, IsStaffOrReadOnly
+from .base import DynamicSerializerMixin, IsAdminOrReadOnly, IsStaffOrReadOnly, EventScopedQuerysetMixin
 
 
-class SpeakerViewSet(viewsets.ModelViewSet):
+class SpeakerViewSet(EventScopedQuerysetMixin, DynamicSerializerMixin, viewsets.ModelViewSet):
     """
     Manage guest speakers (non-platform users).
     

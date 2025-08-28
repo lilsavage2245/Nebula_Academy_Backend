@@ -12,6 +12,7 @@ from achievement.serializers.base import ChoiceDisplayField
 
 # --- LessonMaterial Serializer ---
 class LessonMaterialSerializer(serializers.ModelSerializer):
+    download_url = serializers.SerializerMethodField(read_only=True)
     audience_display = serializers.CharField(source='get_audience_display', read_only=True)
     material_type_display = serializers.CharField(source='get_material_type_display', read_only=True)
     uploaded_by = UserSerializer(read_only=True)
@@ -27,10 +28,20 @@ class LessonMaterialSerializer(serializers.ModelSerializer):
         model = LessonMaterial
         fields = [
             'id', 'lesson', 'title', 'material_type', 'material_type_display',
-            'url', 'version', 'audience', 'audience_display',
+            'file', 'url','version', 'audience', 'audience_display',
             'is_active', 'uploaded_by', 'uploaded_by_id', 'created_at'
         ]
-        read_only_fields = ['id', 'created_at']
+        read_only_fields = ['id', 'created_at', 'download_url', 'uploaded_by']
+    
+    def validate(self, attrs):
+        file = attrs.get('file') or getattr(self.instance, 'file', None)
+        url = attrs.get('url') or getattr(self.instance, 'url', '')
+        if bool(file) == bool(url):  # both set or both empty
+            raise serializers.ValidationError("Provide exactly one of 'file' or 'url'.")
+        return attrs
+
+    def get_download_url(self, obj):
+        return obj.download_url
 
 
 # --- Lesson Display Serializer (for detail/list views) ---

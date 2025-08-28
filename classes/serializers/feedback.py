@@ -2,48 +2,40 @@
 
 from rest_framework import serializers
 from django.utils.timesince import timesince
-from classes.models import LessonComment, LessonReply, LessonRating
+from classes.models import LessonComment, LessonRating
 from core.serializers import UserSerializer  # Centralized reusable user display
 from classes.serializers.fields import UserSafeField, TimeSinceField
 
-# --- Lesson Reply Serializer ---
-class LessonReplySerializer(serializers.ModelSerializer):
-    user = UserSafeField()
-    user_id = serializers.PrimaryKeyRelatedField(
-        source='user',
-        queryset=UserSerializer.Meta.model.objects.all(),
-        write_only=True
-    )
-    time_since = TimeSinceField(source='created_at')
+class RecursiveField(serializers.Serializer):
+    """Render nested replies recursively."""
+    def to_representation(self, value):
+        parent_serializer = self.parent.parent.__class__
+        return parent_serializer(value, context=self.context).data
 
+class LessonCommentCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LessonReply
-        fields = ['id', 'parent_comment', 'user', 'user_id', 'content', 'created_at', 'time_since']
-        read_only_fields = ['id', 'created_at']
+        model = LessonComment
+        fields = ['lesson', 'parent', 'content']  # user comes from request
 
+    def validate(self, data):
+        parent = data.get('parent')
+        lesson = data.get('lesson')
+        if parent and parent.lesson_id != lesson.id:
+            raise serializers.ValidationError("Parent must belong to the same lesson.")
+        return data
 
-# --- Lesson Comment Serializer ---
 class LessonCommentSerializer(serializers.ModelSerializer):
-    user = UserSafeField()
-    user_id = serializers.PrimaryKeyRelatedField(
-        source='user',
-        queryset=UserSerializer.Meta.model.objects.all(),
-        write_only=True
-    )
-    replies = LessonReplySerializer(many=True, read_only=True)
-    reply_count = serializers.SerializerMethodField()
-    time_since = TimeSinceField(source='created_at')
+    user_name = serializers.CharField(source='user.get_full_name', read_only=True)
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+    replies = RecursiveField(many=True, read_only=True)
 
     class Meta:
         model = LessonComment
         fields = [
-            'id', 'lesson', 'user', 'user_id', 'content',
-            'created_at', 'time_since', 'replies', 'reply_count'
+            'id', 'lesson', 'parent', 'user', 'user_name', 'user_email',
+            'content', 'created_at', 'replies'
         ]
-        read_only_fields = ['id', 'created_at']
-
-    def get_reply_count(self, obj):
-        return obj.replies.count()
+        read_only_fields = ['id', 'user', 'created_at', 'replies']
 
 
 # --- Lesson Rating Serializer ---

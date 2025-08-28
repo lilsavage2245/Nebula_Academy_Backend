@@ -6,10 +6,11 @@ from .lesson import Lesson
 
 class LessonComment(models.Model):
     """
-    Comments posted by free or enrolled users on a lesson.
+    Tree-structured comments on a lesson (comments & replies in one table).
+    Use `parent` to reply to any comment; unlimited nesting.
     """
     lesson = models.ForeignKey(
-        'Lesson',
+        Lesson,
         on_delete=models.CASCADE,
         related_name='comments'
     )
@@ -18,38 +19,35 @@ class LessonComment(models.Model):
         on_delete=models.CASCADE,
         related_name='lesson_comments'
     )
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='replies'
+    )
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['created_at']  # chronological within a thread
+        indexes = [
+            models.Index(fields=['lesson', 'created_at']),
+            models.Index(fields=['parent', 'created_at']),
+        ]
 
     def __str__(self):
         return f"Comment by {self.user.email} on {self.lesson.title}"
 
+    @property
+    def is_root(self):
+        return self.parent_id is None
 
-class LessonReply(models.Model):
-    """
-    Tracks user replies to comments.
-    """
-    parent_comment = models.ForeignKey(
-        LessonComment,
-        on_delete=models.CASCADE,
-        related_name='replies'
-    )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='lesson_replies'
-    )
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['created_at']
-
-    def __str__(self):
-        return f"Reply by {self.user.email} to {self.parent_comment.user.email}"
+    def clean(self):
+        # Ensure parent belongs to same lesson
+        if self.parent and self.parent.lesson_id != self.lesson_id:
+            from django.core.exceptions import ValidationError
+            raise ValidationError("Parent comment must belong to the same lesson.")
 
 class LessonRating(models.Model):
     """

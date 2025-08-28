@@ -6,7 +6,6 @@ from classes.views import (
     LessonViewSet,
     LessonMaterialViewSet,
     LessonCommentViewSet,
-    LessonReplyViewSet,
     LessonRatingViewSet,
     LessonAttendanceViewSet,
 )
@@ -20,7 +19,6 @@ router = DefaultRouter()
 router.register(r'lessons', LessonViewSet, basename='lessons')
 router.register(r'materials', LessonMaterialViewSet, basename='materials')
 router.register(r'comments', LessonCommentViewSet, basename='lesson-comments')
-router.register(r'replies', LessonReplyViewSet, basename='lesson-replies')
 router.register(r'ratings', LessonRatingViewSet, basename='lesson-ratings')
 router.register(r'attendance', LessonAttendanceViewSet, basename='lesson-attendance')
 

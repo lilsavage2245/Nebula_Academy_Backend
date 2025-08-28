@@ -1,0 +1,104 @@
+programs:
+  - category: "PRE"
+    name: "Pre-Academy Program"
+    description: >
+      The Nebula Pre-Academy Program is a comprehensive six-level foundational journey designed
+      for curious young minds aged 10 to 16. More than just a coding bootcamp, this program ignites
+      a lifelong passion for innovation, problem-solving, and creative exploration through hands-on,
+      project-based learning.
+    # director_email: lecturer@example.com
+    levels:
+      - level_number: 1
+        title: "Introduction & Exploration"
+        min_age: 10
+        description: >
+          Laying the Digital Foundation. Spark curiosity, build core digital skills, and nurture a love
+          for technology through exploration and creativity. Introduces essentials of the digital world,
+          from navigating devices to simple animations, robotics play, and digital storytelling.
+      - level_number: 2
+        title: "Building & Creating"
+        min_age: 11
+        description: >
+          From Ideas to Real Projects. Transition from exploration to creation with hands-on, project-based
+          learning. Build real projects, collaborate with peers, and see code, robots, and designs come to life.
+      - level_number: 3
+        title: "Intermediate Skills & Application"
+        min_age: 12
+        description: >
+          From Curiosity to Capability. Bridge play and professionalism: introduce real programming languages,
+          structured thinking, and larger projects combining code, hardware, and design.
+      - level_number: 4
+        title: "Advanced Exploration"
+        min_age: 13
+        description: >
+          Turning Learners Into Tech Creators. Dive deeper into text-based programming, advanced robotics/IoT,
+          and game/media development. Emphasize teamwork, problem-solving, and early leadership via real-world
+          role simulation.
+      - level_number: 5
+        title: "Specialized Tech Skills"
+        min_age: 14
+        description: >
+          From Learners to Builders of Real Tech. Develop full-stack thinking: programming logic, UI design,
+          smart device control, and creative media into production-like projects.
+      - level_number: 6
+        title: "Expert Preparation & Portfolio Development"
+        min_age: 15
+        description: >
+          From Student to Skilled Tech Leader. Capstones, real-world systems, and a portfolio reflecting unique
+          tech identity. Apply full SDLC, hackathons, and professional presentation skills.
+
+  - category: "BEG"
+    name: "Beginner Program"
+    description: >
+      A two-level foundation track (Ages 16+) for newcomers or career switchers. Hands-on, project-based
+      learning across programming, web, databases, mobile apps, cloud, cybersecurity, and version control.
+      Balances theory with practice for entry-level readiness and advanced study.
+    levels:
+      - level_number: 1
+        title: "Core Foundations"
+        min_age: 16
+        description: >
+          Building a Solid Base in Programming, Web, Collaboration, and Cyber Awareness. Move from zero to
+          confidently writing code, building responsive websites, managing Git, and understanding the web stack.
+      - level_number: 2
+        title: "Applied Skills & Specializations"
+        min_age: 17
+        description: >
+          Turning Foundations into Real-World Capabilities. Specialized areas (algorithms, data handling,
+          mobile apps, cloud infra) with real outcomes. Capstone project deployed to the cloud and presented professionally.
+
+  - category: "INT"
+    name: "Intermediate Diploma Program"
+    description: >
+      A two-year professional diploma to deepen skills in software development, mobile apps, databases,
+      cloud infrastructure, and cybersecurity. Emphasis on real-world full-stack projects, algorithms, data
+      structures, and network systems. Graduates build a professional portfolio and practical DevOps knowledge.
+    levels:
+      - level_number: 1
+        title: "Application Development & Technical Foundations"
+        description: >
+          Transition from foundational programming to applied software development. Master programming logic,
+          interactive web apps, backend fundamentals, and data-driven decision-making.
+      - level_number: 2
+        title: "Specialized Tech Skills & Advanced Projects"
+        description: >
+          Move into professional specialization and deployment-level skills. Think like developers, architects,
+          and ethical technologists—deliver apps, defend systems, and launch on real infrastructure.
+
+  - category: "ADV"
+    name: "Advanced Program"
+    description: >
+      Final step in the four-year BSc-equivalent pathway (two years). Prepare to lead in Software Engineering,
+      AI, Cloud Architecture, Cybersecurity, and Data Science. Focus on specialization, system-level thinking,
+      and high-impact delivery.
+    levels:
+      - level_number: 1
+        title: "Specialized Expertise"
+        description: >
+          Deep dive into advanced CS, system design, and enterprise development. Transition from capable
+          full-stack developer to well-rounded professional: lead large-scale projects and engineer scalable systems.
+      - level_number: 2
+        title: "Emerging Technologies & Advanced Applications"
+        description: >
+          Master data science, AI, mobile/embedded systems, and system design for scalable, resilient platforms;
+          blend rigorous exploration with real-world innovation.

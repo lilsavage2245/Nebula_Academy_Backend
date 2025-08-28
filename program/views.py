@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import NotFound
+from .utils import suggest_similar_level_slugs
 
 from .models import Program, ProgramLevel, Session, ProgramCategory
 from .serializers import (
@@ -72,35 +74,53 @@ class ProgramViewSet(viewsets.ModelViewSet):
 
 # --- ProgramLevel ViewSet ---
 class ProgramLevelViewSet(viewsets.ModelViewSet):
-    queryset = ProgramLevel.objects.select_related('program')
+    queryset = ProgramLevel.objects.select_related('program').all()
     serializer_class = ProgramLevelSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # or your IsAdminOrReadOnly
     filter_backends = [filters.OrderingFilter]
     ordering = ['level_number']
 
+    # 👇 tell DRF to resolve by slug, not pk
+    lookup_field = 'slug'
+
     def get_queryset(self):
         qs = super().get_queryset()
-
-        # Try all plausible keys + query params
-        rm = getattr(self.request, 'resolver_match', None)
-        rm_kwargs = rm.kwargs if rm else {}
-        program_slug = (
-            self.kwargs.get('program_pk') or
-            self.kwargs.get('program') or
-            self.kwargs.get('slug') or
-            rm_kwargs.get('program_pk') or
-            rm_kwargs.get('program') or
-            rm_kwargs.get('slug') or
-            self.request.query_params.get('program') or
-            self.request.query_params.get('program_slug')
-        )
-
-        logger.debug("ProgramLevelViewSet kwargs=%s rm.kwargs=%s program_slug=%s",
-                     dict(self.kwargs), rm_kwargs, program_slug)
-
+        # Support filtering by parent program in nested routes:
+        # /programs/{program_slug}/levels/...
+        program_slug = self.kwargs.get('program_slug') or self.request.query_params.get('program')
         if program_slug:
             qs = qs.filter(program__slug=program_slug)
         return qs
+
+    def get_object(self):
+        """
+        Override to provide a helpful 'did you mean ... ?' hint when slug is wrong.
+        """
+        # DRF will use lookup_field='slug' and kwarg '<lookup_field>'
+        slug = self.kwargs.get(self.lookup_field)
+        if slug is None:
+            return super().get_object()
+
+        try:
+            return self.get_queryset().get(slug=slug)
+        except ProgramLevel.DoesNotExist:
+            program_slug = self.kwargs.get('program_slug')
+            category = None
+            if not program_slug:
+                # If not nested by program, allow a broader hint by category param
+                category = self.request.query_params.get('category')
+
+            suggestions = suggest_similar_level_slugs(
+                input_slug=slug,
+                program_slug=program_slug,
+                category=category,
+                limit=5,
+            )
+            hint = ""
+            if suggestions:
+                hint = f" Did you mean: {', '.join(suggestions)}?"
+            scope = f" for program '{program_slug}'" if program_slug else ""
+            raise NotFound(detail=f"Program level with slug '{slug}' not found{scope}.{hint}")
 
 # --- Session ViewSet ---
 class SessionViewSet(viewsets.ModelViewSet):

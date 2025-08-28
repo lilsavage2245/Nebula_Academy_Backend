@@ -1,0 +1,160 @@
+defaults:
+  is_active: true
+  school_email_verified: false
+  mfa_enabled: false
+  theme_preference:
+  personalised_class_filter:
+  location: "Lagos, Nigeria"
+
+admins:
+  - email: admin.staging@nebulacodeacademy.com
+    first_name: NebulaCode
+    last_name: Academy
+    password: Cindy1241#
+
+lecturers:
+  - email: V.Okoye@lecturer.nebulacodeacademy.com
+    first_name: Victor
+    last_name: Okoye
+    password: Cindy1241#
+  - email: A.Adewale@lecturer.nebulacodeacademy.com
+    first_name: Adebayo
+    last_name: Adewale
+    password: Cindy1241#
+  - email: S.Aliyu@lecturer.nebulacodeacademy.com
+    first_name: Sani
+    last_name: Aliyu
+    password: Cindy1241#
+  - email: I.Uche@lecturer.nebulacodeacademy.com
+    first_name: Ifeoma
+    last_name: Uche
+    password: Cindy1241#
+  - email: K.Taiwo@lecturer.nebulacodeacademy.com
+    first_name: Kunle
+    last_name: Taiwo
+    password: Cindy1241#
+
+volunteers:
+  - email: C.Diala@volunteer.nebulacodeacademy.com
+    first_name: Chidi
+    last_name: Diala
+    password: Cindy1241#
+  - email: M.Okonkwo@volunteer.nebulacodeacademy.com
+    first_name: Mary
+    last_name: Okonkwo
+    password: Cindy1241#
+  - email: F.Balogun@volunteer.nebulacodeacademy.com
+    first_name: Femi
+    last_name: Balogun
+    password: Cindy1241#
+  - email: O.Adeyemi@volunteer.nebulacodeacademy.com
+    first_name: Omolara
+    last_name: Adeyemi
+    password: Cindy1241#
+  - email: J.Eze@volunteer.nebulacodeacademy.com
+    first_name: Jude
+    last_name: Eze
+    password: Cindy1241#
+
+bloggers:
+  - email: L.Anyiam@blogger.nebulacodeacademy.com
+    first_name: Loveth
+    last_name: Anyiam
+    password: Cindy1241#
+  - email: B.Musa@blogger.nebulacodeacademy.com
+    first_name: Bilkisu
+    last_name: Musa
+    password: Cindy1241#
+  - email: E.Okeke@blogger.nebulacodeacademy.com
+    first_name: Emeka
+    last_name: Okeke
+    password: Cindy1241#
+  - email: R.Hassan@blogger.nebulacodeacademy.com
+    first_name: Rahila
+    last_name: Hassan
+    password: Cindy1241#
+  - email: T.Solomon@blogger.nebulacodeacademy.com
+    first_name: Tolu
+    last_name: Solomon
+    password: Cindy1241#
+
+partners:
+  - email: peterobi@gmail.com
+    first_name: Peter
+    last_name: Obi
+    password: Cindy1241#
+  - email: C.Okoro@partner.nebulacodeacademy.com
+    first_name: Chukwuma
+    last_name: Okoro
+    password: Cindy1241#
+  - email: A.Danjuma@partner.nebulacodeacademy.com
+    first_name: Amina
+    last_name: Danjuma
+    password: Cindy1241#
+  - email: S.Williams@partner.nebulacodeacademy.com
+    first_name: Segun
+    last_name: Williams
+    password: Cindy1241#
+  - email: G.Ibrahim@partner.nebulacodeacademy.com
+    first_name: Grace
+    last_name: Ibrahim
+    password: Cindy1241#
+
+free_students:
+  # must have program_category: PRE, BEG, INT, ADV
+  - email: efeminiedeawor@gmail.com
+    first_name: Efemini
+    last_name: Edeawor
+    password: Cindy1241#
+    program_category: BEG
+  - email: adaokeke@gmail.com
+    first_name: Ada
+    last_name: Okeke
+    password: Cindy1241#
+    program_category: PRE
+  - email: johnogunleye@gmail.com
+    first_name: John
+    last_name: Ogunleye
+    password: Cindy1241#
+    program_category: INT
+  - email: rahmatyusuf@gmail.com
+    first_name: Rahmat
+    last_name: Yusuf
+    password: Cindy1241#
+    program_category: ADV
+  - email: mercybenson@gmail.com
+    first_name: Mercy
+    last_name: Benson
+    password: Cindy1241#
+    program_category: BEG
+
+enrolled_students:
+  - email: O.Onye@student.nebulacodeacademy.com
+    first_name: Onyebuchi
+    last_name: Onye
+    password: Cindy1241#
+    program_level_slug: beginner-program-beg-level-1-core-foundations
+
+  - email: A.Akpan@student.nebulacodeacademy.com
+    first_name: Anietie
+    last_name: Akpan
+    password: Cindy1241#
+    program_level_slug: pre-academy-program-pre-level-1-introduction-exploration
+
+  - email: K.Bello@student.nebulacodeacademy.com
+    first_name: Kemi
+    last_name: Bello
+    password: Cindy1241#
+    program_level_slug: intermediate-diploma-program-int-level-1-application-development-technical-founda
+
+  - email: T.Okafor@student.nebulacodeacademy.com
+    first_name: Tochukwu
+    last_name: Okafor
+    password: Cindy1241#
+    program_level_slug: advanced-program-adv-level-1-specialized-expertise
+
+  - email: I.Mohammed@student.nebulacodeacademy.com
+    first_name: Ibrahim
+    last_name: Mohammed
+    password: Cindy1241#
+    program_level_slug: beginner-program-beg-level-2-applied-skills-specializations

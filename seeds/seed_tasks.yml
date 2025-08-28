@@ -1,0 +1,168 @@
+tasks:
+  # TIME_SPENT (minutes)
+  - code: t_time_60
+    title: Accumulate 1 hour of learning
+    task_type: TIME_SPENT
+    target_count: 60
+    audience: BOTH
+    min_segment: NEWBIE
+    cooldown_weeks: 1
+
+  - code: t_time_120
+    title: Accumulate 2 hours of learning
+    task_type: TIME_SPENT
+    target_count: 120
+    audience: BOTH
+    min_segment: NEWBIE
+    cooldown_weeks: 1
+
+  - code: t_time_180
+    title: Accumulate 3 hours of learning
+    task_type: TIME_SPENT
+    target_count: 180
+    audience: BOTH
+    min_segment: RAMPING
+    cooldown_weeks: 1
+
+  - code: t_time_300
+    title: Accumulate 5 hours of learning
+    task_type: TIME_SPENT
+    target_count: 300
+    audience: BOTH
+    min_segment: RAMPING
+    cooldown_weeks: 1
+
+  - code: t_time_480
+    title: Accumulate 8 hours of learning
+    task_type: TIME_SPENT
+    target_count: 480
+    audience: BOTH
+    min_segment: ENGAGED
+    cooldown_weeks: 2
+
+  # LESSON (counts)
+  - code: t_lesson_1
+    title: Attend 1 lesson
+    task_type: LESSON
+    target_count: 1
+    audience: BOTH
+    min_segment: NEWBIE
+    cooldown_weeks: 1
+
+  - code: t_lesson_2
+    title: Attend 2 lessons
+    task_type: LESSON
+    target_count: 2
+    audience: BOTH
+    min_segment: RAMPING
+    cooldown_weeks: 1
+
+  - code: t_lesson_3
+    title: Attend 3 lessons
+    task_type: LESSON
+    target_count: 3
+    audience: BOTH
+    min_segment: ENGAGED
+    cooldown_weeks: 1
+
+  # ARTICLE (counts)
+  - code: t_article_1
+    title: Publish 1 article
+    task_type: ARTICLE
+    target_count: 1
+    audience: BOTH
+    min_segment: NEWBIE
+    cooldown_weeks: 2
+
+  - code: t_article_2
+    title: Publish 2 articles
+    task_type: ARTICLE
+    target_count: 2
+    audience: BOTH
+    min_segment: ENGAGED
+    cooldown_weeks: 3
+
+  # WORKSHEET (counts)
+  - code: t_ws_1
+    title: Submit 1 worksheet
+    task_type: WORKSHEET
+    target_count: 1
+    audience: BOTH
+    min_segment: NEWBIE
+    cooldown_weeks: 2
+
+  - code: t_ws_2
+    title: Submit 2 worksheets
+    task_type: WORKSHEET
+    target_count: 2
+    audience: BOTH
+    min_segment: RAMPING
+    cooldown_weeks: 3
+
+  # QUIZ (counts)
+  - code: t_quiz_1
+    title: Complete 1 quiz
+    task_type: QUIZ
+    target_count: 1
+    audience: BOTH
+    min_segment: NEWBIE
+    cooldown_weeks: 2
+
+  - code: t_quiz_3
+    title: Complete 3 quizzes
+    task_type: QUIZ
+    target_count: 3
+    audience: BOTH
+    min_segment: ENGAGED
+    cooldown_weeks: 3
+
+  # STREAK (days)
+  - code: t_streak_2
+    title: Be active on 2 days this week
+    task_type: STREAK
+    target_count: 2
+    audience: BOTH
+    min_segment: NEWBIE
+    cooldown_weeks: 1
+
+  - code: t_streak_3
+    title: Be active on 3 days this week
+    task_type: STREAK
+    target_count: 3
+    audience: BOTH
+    min_segment: RAMPING
+    cooldown_weeks: 1
+
+  - code: t_streak_5
+    title: Be active on 5 days this week
+    task_type: STREAK
+    target_count: 5
+    audience: BOTH
+    min_segment: ENGAGED
+    cooldown_weeks: 2
+
+  # Mixers / alternates
+  - code: t_mix_article_or_ws
+    title: Create content (article or worksheet)
+    description: Complete either 1 article or 1 worksheet this week
+    task_type: ARTICLE
+    target_count: 1
+    audience: BOTH
+    min_segment: RAMPING
+    cooldown_weeks: 2
+
+  - code: t_time_90
+    title: Accumulate 1.5 hours of learning
+    task_type: TIME_SPENT
+    target_count: 90
+    audience: BOTH
+    min_segment: NEWBIE
+    cooldown_weeks: 1
+
+  - code: t_lesson_4
+    title: Attend 4 lessons
+    task_type: LESSON
+    target_count: 4
+    audience: BOTH
+    min_segment: ENGAGED
+    cooldown_weeks: 3

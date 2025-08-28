@@ -18,12 +18,38 @@ from django.core.exceptions import ImproperlyConfigured
 from urllib.parse import urlparse
 from dotenv import load_dotenv
 import dj_database_url
+from celery.schedules import crontab
 
 # ───────────────────────────────── Base / env
 BASE_DIR = Path(__file__).resolve().parent.parent
 env_file = f".env.{os.getenv('ENV', 'local')}"
+STORAGE_BACKEND = os.getenv("STORAGE_BACKEND", "local")  # local | s3
 load_dotenv(BASE_DIR / env_file)  # loads .env.local, .env.staging, or .env.production
 ENV = os.getenv("ENV", "local").lower()  # local | staging | production
+
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"   # e.g. C:\...\nebula_backend\media
+TIME_ZONE = os.getenv("TIMEZONE", "Europe/London")
+
+
+CELERY_BEAT_SCHEDULE = {
+    "assign-weekly-tasks-monday-0005": {
+        "task": "badgetasks.tasks.assign_weekly_tasks_job",
+        "schedule": crontab(hour=0, minute=5, day_of_week="monday"),
+    },
+}
+
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://redis:6379/0")
+
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["json"]  # IMPORTANT: list, not string
+CELERY_TIMEZONE = TIME_ZONE
+
+# Optional: speed up dev, avoid storing results if you don't need them
+# CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", None)
 
 # Fail fast if no secret
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -50,8 +76,8 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
 ]
-CORS_ALLOWED_ORIGINS = csv("CORS_ALLOWED_ORIGINS", "http://localhost:3000")
-#CORS_ALLOWED_ORIGINS = csv("CORS_ALLOWED_ORIGINS")
+#CORS_ALLOWED_ORIGINS = csv("CORS_ALLOWED_ORIGINS", "http://localhost:3000")
+CORS_ALLOWED_ORIGINS = csv("CORS_ALLOWED_ORIGINS")
 CSRF_TRUSTED_ORIGINS = csv("CSRF_TRUSTED_ORIGINS")
 
 FRONTEND_URL = (
@@ -100,6 +126,32 @@ INSTALLED_APPS = [
 
 ]
 
+if STORAGE_BACKEND == "local":
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+elif STORAGE_BACKEND == "s3":
+    # pip install "django-storages[boto3]"
+    INSTALLED_APPS = [*INSTALLED_APPS, "storages"]
+
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", None)
+    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", None)  # optional for MinIO or custom endpoint
+    AWS_S3_SIGNATURE_VERSION = os.getenv("AWS_S3_SIGNATURE_VERSION", "s3v4")
+
+    # Security: keep objects PRIVATE; URLs will be signed
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = True
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_S3_OBJECT_PARAMETERS = {
+        "CacheControl": "max-age=86400",  # adjust per need
+    }
+
+    # Optional: custom domain (CloudFront). If you use this, still keep private + signed
+    AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN", None)
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -114,8 +166,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 CORS_ALLOW_CREDENTIALS = True
-#CORS_ALLOW_HEADERS = ["*"]
-#CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+CORS_ALLOW_HEADERS = ["*"]
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 STATIC_URL = "/static/"

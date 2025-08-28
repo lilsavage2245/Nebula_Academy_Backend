@@ -1,0 +1,84 @@
+modules:
+  - title: "Programming Fundamentals"
+    description: >-
+      “Think logically. Code clearly. Start building.” This foundational module introduces students
+      to programming through Python and JavaScript. Learners gain confidence in writing clean,
+      functional code, debugging errors, and creating interactive digital experiences.
+    prerequisites: "None beyond basic computer literacy. No prior coding required."
+    tools_software:
+      - "VS Code (Python extension, Live Server, Prettier)"
+      - "Python 3.12+ (with pip / venv)"
+      - "Modern browser + DevTools (Chrome/Edge/Firefox/Safari)"
+      - "Git & GitHub (for version control and submissions)"
+      - "Node.js LTS (for future tooling)"
+      - "Jupyter Notebook"
+    # Prefer level slugs or IDs; title_hints are a fallback
+    levels:
+      slugs: ["pre-academy-program-pre-level-1-introduction-exploration"]   # optional
+      ids: []                                        # optional
+      title_hints: ["Beginner", "Level 1", "Core Foundations"]   # optional
+    is_standalone: true
+    is_active: true
+
+    lecturers:
+      - { email: "V.Okoye@lecturer.nebulacodeacademy.com", role: "Lead" }
+      - { email: "A.Adewale@lecturer.nebulacodeacademy.com", role: "" }
+
+    materials:
+      - title: "Syllabus & Roadmap"
+        type: "LINK"           # PDF | SLIDES | LINK | OTHER
+        audience: "BOTH"       # FREE | ENROLLED | BOTH
+        external_url: "https://example.com/programming-fundamentals/syllabus"
+        version: "v1"
+      - title: "Environment Setup Guide"
+        type: "LINK"
+        audience: "ENROLLED"
+        external_url: "https://example.com/programming-fundamentals/setup"
+        version: "v1"
+
+    evaluations:
+      - { type: "QUIZ", title: "Lesson Quizzes", max_score: 40, weight: 0.30, criteria: { pass_mark: 28 } }
+      - { type: "EXAM", title: "Fundamentals Exam", max_score: 50, weight: 0.40, criteria: { pass_mark: 35 } }
+      - { type: "PROJECT", title: "Mini Project", max_score: 60, weight: 0.30, criteria: { rubric: ["Clean code", "Functionality", "Docs"] } }
+
+  - title: "Web Development Basics"
+    description: >-
+      "Design and build web experiences that work for everyone."
+      Students learn the core building blocks of the web: HTML for structure and CSS for style.
+      They explore responsive design with Flexbox and Bootstrap to create beautiful layouts that
+      adapt to all devices. Emphasis is placed on semantic markup, accessibility, clean CSS
+      architecture, and progressive enhancement.
+    prerequisites: "None beyond basic computer literacy."
+    tools_software:
+      - "VS Code (Live Server + Prettier)"
+      - "Modern browsers with DevTools"
+      - "Git & GitHub (GitHub Pages for deployment)"
+      - "Bootstrap 5 (via CDN)"
+      - "CodePen / Figma for quick prototypes"
+    levels:
+      slugs: ["pre-academy-program-pre-level-1-introduction-exploration"]
+      ids: []
+      title_hints: ["Beginner", "Level 1", "Core Foundations"]
+    is_standalone: true
+    is_active: true
+
+    lecturers:
+      - { email: "K.Taiwo@lecturer.nebulacodeacademy.com", role: "Lead" }
+      - { email: "I.Uche@lecturer.nebulacodeacademy.com", role: "" }
+
+    materials:
+      - title: "HTML/CSS Starter Kit"
+        type: "LINK"
+        audience: "BOTH"
+        external_url: "https://example.com/web-basics/starter"
+        version: "v1"
+      - title: "Bootstrap 5 Cheatsheet"
+        type: "LINK"
+        audience: "ENROLLED"
+        external_url: "https://example.com/web-basics/bootstrap5-cheatsheet"
+        version: "v1"
+
+    evaluations:
+      - { type: "QUIZ", title: "Lesson Quizzes", max_score: 30, weight: 0.25, criteria: { pass_mark: 21 } }
+      - { type: "EXAM", title: "CSS & Accessibility Exam", max_score: 50, weight: 0.45, criteria: { pass_mark: 35 } }
+      - { type: "PROJECT", title: "Responsive Site Project", max_score: 70, weight: 0.30, criteria: { rubric: ["Semantics", "Responsiveness", "A11y"] } }

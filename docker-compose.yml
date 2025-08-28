@@ -1,0 +1,61 @@
+
+services:
+  redis:
+    image: redis:7
+    container_name: nebula-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  web:
+    build: { context: ., dockerfile: Dockerfile }
+    image: nebula_backend-web
+    container_name: nebula-web
+    env_file:
+      - .env.local
+    depends_on:
+      - redis
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./seeds:/app/seeds   
+    command: >
+      sh -c "
+        python manage.py migrate &&
+        python manage.py collectstatic --noinput &&
+        gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3
+      "
+    restart: unless-stopped
+
+  worker:
+    build: { context: ., dockerfile: Dockerfile }
+    image: nebula_backend-worker
+    container_name: nebula-worker
+    env_file:
+      - .env.local
+    depends_on:
+      - redis
+    command: celery -A config worker -l info
+    restart: unless-stopped
+
+  beat:
+    build: { context: ., dockerfile: Dockerfile }
+    image: nebula_backend-beat
+    container_name: nebula-beat
+    env_file:
+      - .env.local
+    depends_on:
+      - redis
+    command: celery -A config beat -l info
+    restart: unless-stopped
+
+volumes:
+  redisdata:

@@ -15,7 +15,6 @@ from .lesson import (
 
 from .feedback import (
     LessonCommentSerializer,
-    LessonReplySerializer,
     LessonRatingSerializer,
 )
 
@@ -33,7 +32,7 @@ __all__ = [
     # lesson
     "LessonSerializer", "LessonCreateUpdateSerializer", "LessonMaterialSerializer",
     # feedback
-    "LessonCommentSerializer", "LessonReplySerializer", "LessonRatingSerializer",
+    "LessonCommentSerializer", "LessonRatingSerializer",
     # attendance
     "LessonAttendanceSerializer",
     # "LessonAttendanceSummarySerializer",

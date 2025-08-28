@@ -44,9 +44,10 @@ class Program(SlugModelMixin, models.Model):
 
 class ProgramLevel(models.Model):
     program      = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='levels')
-    level_number = models.PositiveSmallIntegerField()  # e.g., 1-6
+    level_number = models.PositiveSmallIntegerField()
     title        = models.CharField(max_length=255)
     description  = models.TextField()
+    slug         = models.SlugField(max_length=140, unique=True, blank=True)  # 👈 NEW
 
     class Meta:
         unique_together = ('program', 'level_number')
@@ -56,6 +57,22 @@ class ProgramLevel(models.Model):
 
     def __str__(self):
         return f"{self.program.name} — Level {self.level_number}: {self.title}"
+
+    def _slug_base(self):
+        # includes program slug + level number + trimmed title
+        prog_slug = self.program.slug or slugify(self.program.name)
+        return f"{prog_slug}-level-{self.level_number}-{slugify(self.title)[:40]}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = self._slug_base()
+            slug = base
+            i = 1
+            while ProgramLevel.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base}-{i}"
+                i += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
 
 class Session(models.Model):

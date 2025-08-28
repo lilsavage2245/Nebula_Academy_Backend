@@ -19,6 +19,8 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 def api_root(_):
@@ -66,3 +68,7 @@ urlpatterns = [
     path("api/dashboard/", include("dashboard.urls")),
     path("api/engagement/", include("engagement.urls")),
 ]
+
+
+if settings.DEBUG and settings.STORAGE_BACKEND == "local":
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

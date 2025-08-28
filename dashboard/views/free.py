@@ -1,5 +1,6 @@
 # dashboard/views/free
 
+from urllib import request
 import urllib.parse
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -132,8 +133,8 @@ class FreeDashboardOverviewAPIView(APIView):
         badges = AwardedBadge.objects.filter(user=user).select_related("badge")
         badges_earned = [{"title": b.badge.title, "icon": b.badge.icon or "🏅"} for b in badges]
 
-        # Evaluate + pull weekly tasks
-        evaluate_weekly_tasks_for_user(user)
+        # If you want TIME_SPENT to include EngagementPing minutes, set flag True:
+        evaluate_weekly_tasks_for_user(request.user, include_active_minutes_in_time_spent=False)
         task_qs = WeeklyTaskAssignment.objects.filter(user=user).select_related("task")
         weekly_tasks = [
             {

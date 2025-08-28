@@ -1,0 +1,235 @@
+# seeds/seed_event.yml
+categories:
+  - name: Learning Events
+    description: Events focused on direct skill building and hands-on sessions
+  - name: Guest and Industry Speaker Events
+    description: Talks from external experts and professionals in tech
+  - name: Career and Mentorship Events
+    description: Helping students grow professionally and connect with mentors
+  - name: Academy Information and Onboarding Events
+    description: Introductory sessions for new students and applicants
+  - name: Hackathons and Competitions
+    description: Fun and rewarding coding challenges to build skills
+  - name: Recognition and Award Events
+    description: Celebrating learners' achievements and milestones in the academy
+  - name: Community and Support Events
+    description: Encouraging community interaction, emotional support, and inclusivity
+  - name: Partnership and Global Events
+    description: Events hosted with or by our partners, sponsors, or global education networks
+  - name: Special Campaigns and Challenges
+    description: Periodic themed campaigns that run across the academy
+
+speakers:
+  - name: Adaeze Okonkwo
+    bio: Senior Software Engineer at Google, I am passionate about mentorship and creating inclusive developer communities across Africa.
+    website: https://adaeze.dev
+    profile_image: seeds/assets/events/speakers/adaeze_GP.png
+  - name: Moyo Salami
+    bio: A backend developer at Andela and speaker at DevCon Africa, Moyo builds scalable APIs and trains young engineers in clean architecture.
+    profile_image: seeds/assets/events/speakers/moyosalami_GP.png
+    website: https://moyosalami.dev
+  - name: Grace Hopper
+    bio: Invented the first compiler; Navy Rear Admiral.
+    website: https://gracehopper.example
+    profile_image: seeds/assets/events/speakers/gracehopper_GP.png
+  - name: Tomi Adeyemi
+    bio: Founder of Code4Change, Tomi is a passionate advocate for diversity in tech and has mentored over 500 students in Nigeria.
+    website: https://code4change.ng
+    profile_image: seeds/assets/events/speakers/tomi_GP.png
+  - name: Tolu Adediran
+    bio: UX Designer at Paystack with a background in psychology, Tolu focuses on design accessibility and human-centered systems.
+    website: https://toluux.com
+    profile_image: seeds/assets/events/speakers/toluade_GP.png
+  - name: Kwame Mensah
+    bio: Ghanaian AI researcher and educator, Kwame leads machine learning bootcamps across West Africa and consults for edtech startups.
+    website: https://kwamemensah.ai
+    profile_image: seeds/assets/events/speakers/kwamemensah_GP.png
+  - name: Ifeoluwa Bakare
+    bio: A cloud engineer at AWS, Ifeoluwa builds secure DevOps pipelines and hosts the "Cloud Simplified" YouTube series.
+    website: https://ifecloud.tech
+  - name: Zainab Kamara
+    bio: A cybersecurity analyst at Flutterwave, Zainab teaches digital safety to teens and runs workshops on ethical hacking.
+    website: https://zainabsecure.com
+    profile_image: seeds/assets/events/speakers/zainab_GP.png
+  - name: Chinedu Uzo
+    bio: CTO at a Lagos-based healthtech startup, Chinedu mentors full-stack devs and contributes to open-source health apps.
+    website: https://chinedu.dev
+  - name: Halima Yusuf
+    bio: Data Scientist at Ingressive for Good, Halima focuses on youth skilling, data equity, and empowering girls through analytics.
+    website: https://halimayusuf.com
+  - name: Daniel Omondi
+    bio: Frontend engineer at Canva, Daniel builds design systems and leads community meetups for African creatives in tech.
+    website: https://danielomondi.dev
+
+
+events:
+  - title: From Idea to App- Beginner Live Project Workshop
+    slug: from-idea-to-app-beginner-live-project-workshop
+    description_html: |
+      <h2>What’s Happening?</h2>
+      <p>You’ve got ideas, now it’s time to bring them to life.</p>
+      <p><strong>On August 24</strong>, Nebula Code Academy will host a brand-new,
+      hands-on workshop titled <em>“From Idea to App”</em>, where beginner learners
+      will turn their own app ideas into working prototypes — even if they’ve never coded before.</p>
+      <p>This is part of our <a href="/programs/beginner" target="_blank" rel="noopener">Beginner Program Learning Series</a> and is <strong>100% free</strong> for first-time attendees.</p>
+
+      <h3>What You Will Learn</h3>
+      <ul>
+        <li>Turn a real-world problem into a simple app concept</li>
+        <li>App fundamentals using Scratch or Thonny (Python)</li>
+        <li>Project structuring: input, output, design, and testing</li>
+        <li>Live coding walkthrough from idea to prototype</li>
+        <li><strong>Bonus:</strong> How to present your app with confidence!</li>
+      </ul>
+      <p>🎁 Every student will walk away with a project they built themselves, ready to showcase or improve.</p>
+
+      <h3>Who Should Attend?</h3>
+      <ul>
+        <li>Beginner coders ready to build their first real project</li>
+        <li>Free class students who want more hands-on practice</li>
+        <li>Parents who want to observe or help their child’s progress</li>
+        <li>Anyone aged 10–18 curious about how apps are built</li>
+      </ul>
+
+      <h3>Why It Matters</h3>
+      <blockquote>
+        “Watching my idea turn into something I can use made me feel like a real tech creator.”<br />
+        — Tomisin, 13, Beginner Program Student
+      </blockquote>
+      <blockquote>
+        “I thought you had to be a pro to build apps — now I know I just needed the right guide.”<br />
+        — Precious, 15, Free Class Attendee
+      </blockquote>
+
+      <p>This workshop is the perfect next step after attending any of our free intro classes or webinars.</p>
+
+      <h3>What’s Next After This?</h3>
+      <ul>
+        <li>Certificate of Participation</li>
+        <li>Invite to submit projects to the Nebula Showcase Wall</li>
+        <li>Fast-track access to apply for Beginner Program Level 1</li>
+        <li>10 bonus XP toward your first digital badge 🎖️</li>
+      </ul>
+    category_name: Learning Events
+    event_type: WEBINAR
+    target_group: PUBLIC
+    audience_description: Beginner Students (Ages 10–18), Parents, Tech Newbies
+    format: ONLINE
+    status: UPCOMING
+    start_datetime: "+7d 18:00"
+    end_datetime: "+7d 20:00"      # ensure after start
+    event_link: "https://youtube.com/watch?v=abcd"
+    venue: ""
+    tags: ["python", "parents", "beginner"]
+    banner_image: "seeds/assets/events/banner/BeginnerLiveEvent.png"
+    attached_file_path: ""
+    is_published: true
+    is_featured: true
+    is_registration_required: true
+    capacity: 200
+    registration_deadline: "+6d 23:59"
+    organizers: ["admin.staging@nebulacodeacademy.com", "v.okoye@lecturer.nebulacodeacademy.com", "peterobi@gmail.com"]
+
+    speakers:
+      # platform user speaker
+      - speaker_type: USER
+        user_email: v.okoye@lecturer.nebulacodeacademy.com
+        role: Instructor
+        speaker_order: 1
+
+      # guest speaker from speakers[] above
+      - speaker_type: GUEST
+        guest_name: Moyo Salami
+        role: Guest Mentor
+        speaker_order: 2
+
+  - title: Beyond the Code- Live Q&A with a Google Software Engineer
+    slug: beyond-the-code-live-qa-with-a-google-software-eng
+    description: |
+      ## What’s Happening?
+
+      Ever wondered what it’s really like to work at **Google**?  
+
+      Join us for *“Beyond the Code”*, an exclusive fireside chat with **Adaeze Okonkwo**, Software Engineer at Google and proud Nigerian trailblazer in global tech.  
+
+      On **August 31**, Adaeze will sit down with Nebula’s Career Team for a no-filter conversation about:
+
+      - Building confidence as a young woman in tech  
+      - The real skills that matter (beyond coding)  
+      - Behind-the-scenes of life at Google  
+      - What she wishes she knew earlier in her journey  
+
+      ---
+
+      ## Why You Should Attend
+
+      - Get inspired by someone who looks like you and came from a similar background  
+      - Discover career tips that no tutorial will teach you  
+      - Ask your own questions live — this is a safe, supportive space  
+      - Gain early access to Adaeze’s *“Path to Google”* resource kit (shared only with attendees)  
+
+       **Bonus:** All attendees receive the *“Industry Explorer”* digital badge  
+
+      ---
+
+      ## Who This Event Is For
+
+      - Students aged **13–25** exploring tech career options  
+      - Girls in tech looking for role models and mentors  
+      - Parents curious about their child’s future in global tech  
+      - Free learners ready for the next level of exposure  
+
+      > *“Hearing from someone who started like me gave me the clarity and courage I’ve been looking for.”*  
+      > — **Taiwo, 16, Beginner Program Student**
+
+      ---
+
+      ## What You Will Walk Away With
+
+      - Practical advice on soft skills, interviews, and remote work  
+      - Personal insights into tech company culture  
+      - A custom **Career Path Toolkit** PDF  
+      - Exclusive invite to **Nebula Career Mentorship Circle – September Intake**
+
+    category_name: Guest and Industry Speaker Events
+    event_type: MEETUP
+    target_group: ALL
+    format: HYBRID
+    status: UPCOMING
+    start_datetime: "2025-10-01 16:00"
+    end_datetime:   "2025-10-01 17:30"
+    event_link: "https://meet.google.com/xyz"
+    venue: "Innovation Hub, Lagos"
+    tags: ["campus", "hybrid", "tour", "mentorship", "google", "software-engineer", "qa"]
+    is_published: true
+    is_featured: true
+    banner_image: "seeds/assets/events/banner/beyondthecode_banner.png"
+    attached_file_path: ""
+    audience_description: "Audience	Beginner and Intermediate Students, Parents, Free Class Participants"
+    is_registration_required: true
+    capacity: 50
+    registration_deadline: "2025-09-30 23:59"
+    organizers: ["admin.staging@nebulacodeacademy.com"]
+
+    speakers:
+      # platform user speaker
+      - speaker_type: USER
+        user_email: v.okoye@lecturer.nebulacodeacademy.com
+        role: Instructor
+        speaker_order: 1
+
+      # guest speaker from speakers[] above
+      - speaker_type: GUEST
+        guest_name: Moyo Salami
+        role: Guest Mentor
+        speaker_order: 2
+
+registrations:
+  - guest_name: Uche Okoye
+    guest_email: ucheokoye201@gmail.com
+    event_slug: from-idea-to-app-beginner-live-project-workshop
+    status: REJECTED
+  - user_email: O.Onye@student.nebulacodeacademy.com
+    event_slug: beyond-the-code-live-qa-with-a-google-software-eng
+    status: APPROVED
+    attended: true

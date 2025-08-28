@@ -35,9 +35,10 @@ class ProgramAdmin(admin.ModelAdmin):
 
 @admin.register(ProgramLevel)
 class ProgramLevelAdmin(admin.ModelAdmin):
-    list_display = ('program', 'level_number', 'title')
+    list_display = ('program', 'level_number', 'title', 'slug')
+    search_fields = ('title', 'description', 'program__name', 'slug')
     list_filter = ('program__category', 'program')
-    search_fields = ('title', 'description', 'program__name')
+    readonly_fields = ('slug',)
     ordering = ('program', 'level_number')
 
 

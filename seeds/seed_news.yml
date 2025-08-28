@@ -1,0 +1,135 @@
+categories:
+  - name: Academy News and Updates
+    slug: academy-news
+    description: Updates and news from the Nebula Code Academy
+  - name: Technology Industry News
+    slug: technology-industry
+    description: Latest trends and news in the tech industry
+  - name: Students and Alumni Stories
+    slug: student-alumni
+    description: Success stories and experiences from our students and alumni
+  - name: Career Path and Industry Insights
+    slug: career-paths
+    description: Insights into career paths in technology and coding
+  - name: Learning Tips and Study hacks
+    slug: learning-tips
+    description: Tips and tricks for effective learning and studying in tech
+  - name: Parents and Guardians Corner
+    slug: parents-corner
+    description: Resources and advice for parents and guardians of tech students
+  - name: Events and Campaigns Insights
+    slug: events-campaigns
+    description: Information on all internal or partnered events and campaigns
+  - name: Global Education and EdTech trends
+    slug: global-education
+    description: Trends and innovations in global education and EdTech
+  - name: Wellness, Support, and Community
+    slug: wellness-support
+    description: Resources for student wellness, support, and community building  
+  - name: Tech Challenges and Competitions
+    slug: tech-challenges
+    description: Information on tech challenges, competitions, and hackathons
+
+posts:
+  - title: "Nebula Academy Wins EdTech Grant to Expand AI-Powered Curriculum"
+    slug: nebula-academy-wins-edtech-grant
+    author_email: L.Anyiam@blogger.nebulacodeacademy.com
+    category_slug: academy-news
+    summary: "Nebula Code Academy has been awarded a prestigious EdTech Innovation Grant to integrate AI-powered interactive learning across its curriculum, enabling personalized coding paths and intelligent tutor support for students worldwide."
+    published_on: "2025-09-01T09:00:00Z"     # ISO 8601 or "2025-09-01 10:00:00"
+    created_at:  "2025-08-15 10:30:00"
+    updated_at:  "2025-08-16 08:10:00"
+    image: "NCA_wins_EDtech.png"
+    #image_url: "https://picsum.photos/seed/hackathon/1200/800"  # remote URL (optional)
+    content: |
+      # What’s New
+      Nebula Code Academy is thrilled to announce that it has been selected as a recipient of the **2025 EdTech Innovation Grant**, a program backed by leading global education investors and tech foundations. Starting this fall, the grant will power the introduction of AI-driven interactive learning tools, including adaptive quiz challenges, real-time feedback on coding exercises, and a personalized learning roadmap.
+
+      ## Background
+      The EdTech Innovation Grant is designed to support forward-thinking education platforms. It evaluates applicants based on innovation, scalability, and impact. Nebula’s proposal, which highlighted the use of AI to make coding more engaging, inclusive, and tailored to individual learners, stood out among dozens of applicants.
+
+      ## Why It Matters
+      This funding allows Nebula to deliver an even more dynamic learning experience tailored to each student’s pace and style. The AI enhancements will:
+      - Offer instant code feedback, reducing frustration and accelerating learning
+      - Recommend next-best lessons based on performance and learning history
+      - Provide accessible helpers for students who learn in diverse contexts, whether they’re in Kano, Lagos, or beyond
+
+      > **Insight**  
+      > “Adaptive learning is the future. With this grant, Nebula can meet students where they are, and take them further than ever imagined.”  
+      > — *Dr. Folake Adebayo, Lead Education Technologist, Nebula*
+
+      ## Career-Ready Skills in a Changing Industry
+      Building the next generation of developers isn’t just about teaching syntax—it’s about curating experiences that adapt, respond, and support students. With AI-powered learning tools, Nebula equips students to become confident coders, critical thinkers, and agile problem solvers—exactly the kind of talent top tech firms seek.
+
+      ---
+      **Further Information**  
+      To learn more about this initiative, pilot AI features, or propose collaborative use cases, contact:  
+      *Written by: Loveth K, Academy Program Writer*
+    status: PUBLISHED
+    allow_comments: true
+
+  - title: "UI/UX Designers and Prompt Engineers Are Now in High Demand Even Without a CS Degree"
+    slug: ui-ux-designers-prompt-engineers-high-demand
+    author_email: efeminiedeawor@gmail.com
+    category_slug: career-paths
+    summary: "With AI reshaping the tech industry, careers in UI/UX design and prompt engineering are rising fast, and they’re open to creative, non-traditional learners who don’t have computer science degrees."
+    published_on: "2025-09-01T09:00:00Z"     # ISO 8601 or "2025-09-01 10:00:00"
+    created_at:  "2025-08-15 10:30:00"
+    updated_at:  "2025-08-16 08:10:00"
+    image: "UIUX_highdemand.png"
+    content: |
+      # What’s New
+      According to recent job data published by *Business Insider*, roles like **UI/UX designer** and **prompt engineer** are among the fastest-growing tech careers in **2025**, and many companies no longer require a formal CS degree to apply. Hiring managers now prioritize **portfolios**, **design thinking**, and fluency with tools like **Figma**, **Notion**, and **AI content structuring** over traditional credentials.
+
+      A report from LinkedIn’s *Emerging Jobs* list also noted a **40% increase** in demand for **design-focused AI professionals** and **AI prompt specialists** across marketing, education, and SaaS.
+
+      ## Background
+      **Prompt engineering** involves crafting clear, effective instructions for AI models like ChatGPT or Claude, and it’s becoming critical in teams building user-facing tools, chatbots, or generative content apps.
+
+      Meanwhile, **UI/UX designers** are shaping AI-integrated journeys — from onboarding flows to chatbot interfaces. Because these careers rely on **creativity, empathy, and iterative design**, they’re accessible entry points for students from diverse backgrounds.
+
+      ## Why It Matters
+      At a time when automation threatens many traditional tech roles, these careers highlight the growing need for **human-centered, creative thinkers** who can work *with* — not just around — AI systems. For Nebula learners, it’s a clear signal that:
+
+      - You **don’t need to master algorithms** to thrive in tech  
+      - **Soft skills + visual storytelling + tool mastery = real career potential**  
+      - **Systems thinking** is as valuable as learning to code
+
+      ## Insight
+      > “I didn’t come from a coding background, but I love design. Now I build AI chat flows that talk to real customers.”  
+      > — *Ifunanya, UI/UX Designer & Prompt Engineer, Lagos*
+
+      ## Career-Ready Skills in a Changing Industry
+      As companies blend AI tools with user-facing experiences, they’re hiring students who can **ask good questions**, **map clean flows**, and **build responsive, accessible designs**. Roles like **prompt engineer**, **UX writer**, **AI content architect**, and **visual interface designer** are no longer niche — they’re critical.
+
+      **Nebula’s curriculum** is evolving to meet that demand with hands-on projects in:
+
+      - **UI/UX and product design**  
+      - **AI prompting and no-code flows**  
+      - **Prototyping with Figma, Webflow, and Notion AI**
+
+      ---
+
+      **Further Information**  
+      To explore these career tracks, join Nebula’s UI/UX and AI-enhanced learning workshops, or connect with our **Career Mentorship Team**.
+
+      *Written by:* **Efemin Edeawor, Industry Insight Contributor**  
+      📧 **efeminiedeawor@gmail.com**
+    status: PENDING
+
+comments:
+  - post_slug: nebula-academy-wins-edtech-grant
+    user_email: efeminiedeawor@gmail.com
+    content: "This is so exciting!"
+    is_approved: true
+
+reactions:
+  - post_slug: nebula-academy-wins-edtech-grant
+    user_email: mercybenson@gmail.com
+    reaction: LIKE
+
+subscribers:
+  - user_email: rahmatyusuf@gmail.com
+    category_slug: career-paths
+  - user_email: efeminiedeawor@gmail.com
+    author_email: L.Anyiam@blogger.nebulacodeacademy.com

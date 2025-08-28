@@ -1,11 +1,17 @@
+# module/admin.py
 from django.contrib import admin
+from django.utils.html import format_html
+from django.urls import reverse
+
 from .models import (
     Module, ModuleLevelLink, ModuleLecturer,
-    LectureMaterial, EvaluationComponent
+    ModuleMaterial, EvaluationComponent,
 )
-from achievement.models import Badge
 
-# --- Inlines ---
+
+# -------------------
+# Inlines
+# -------------------
 
 class ModuleLevelLinkInline(admin.TabularInline):
     model = ModuleLevelLink
@@ -24,16 +30,52 @@ class ModuleLecturerInline(admin.TabularInline):
     verbose_name_plural = "Lecturers"
 
 
-class LectureMaterialInline(admin.StackedInline):  # Stacked for richer fields
-    model = LectureMaterial
+class ModuleMaterialInline(admin.StackedInline):
+    """
+    Stacked for richer fields. Shows both file and external_url so admins can pick one.
+    Model validation enforces the correct combination per MaterialType.
+    """
+    model = ModuleMaterial
     extra = 0
-    fields = ['title', 'audience', 'slides', 'video_url']
-    readonly_fields = ['created_at']
-    verbose_name = "Lecture Material"
-    verbose_name_plural = "Lecture Materials"
+    fields = (
+        'title', 'slug', 'description',
+        'type', 'audience',
+        'file', 'external_url',
+        'version', 'is_active',
+        ('content_type', 'file_size'),
+        'created_at',
+        'admin_open_link', 'admin_download_link',
+    )
+    readonly_fields = ('slug', 'created_at', 'content_type', 'file_size', 'admin_open_link', 'admin_download_link')
+    verbose_name = "Module Material"
+    verbose_name_plural = "Module Materials"
+
+    def admin_open_link(self, obj):
+        if not obj.pk:
+            return "-"
+        # Uses storage URL if available (may be signed depending on storage backend)
+        if obj.file and hasattr(obj.file, "url"):
+            return format_html('<a href="{}" target="_blank">Open</a>', obj.file.url)
+        if obj.external_url:
+            return format_html('<a href="{}" target="_blank">External</a>', obj.external_url)
+        return "-"
+    admin_open_link.short_description = "Open"
+
+    def admin_download_link(self, obj):
+        if not obj.pk:
+            return "-"
+        try:
+            url = reverse("module:module-materials-download", kwargs={
+                "module_pk": obj.module.slug,  # nested router kwarg name
+                "slug": obj.slug,
+            })
+            return format_html('<a href="{}" target="_blank">Download</a>', url)
+        except Exception:
+            return "-"
+    admin_download_link.short_description = "Download"
 
 
-class EvaluationComponentInline(admin.TabularInline):  # Tabular is fine for short fields
+class EvaluationComponentInline(admin.TabularInline):
     model = EvaluationComponent
     extra = 0
     fields = ['type', 'title', 'weight']
@@ -41,43 +83,35 @@ class EvaluationComponentInline(admin.TabularInline):  # Tabular is fine for sho
     verbose_name = "Evaluation"
     verbose_name_plural = "Evaluations"
 
-# --- Main Admin ---
+
+# -------------------
+# Admins
+# -------------------
 
 @admin.register(Module)
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ['title', 'is_standalone', 'created_at']
-    search_fields = ['title', 'description']
-    list_filter = ['is_standalone']
-    prepopulated_fields = {'slug': ('title',)}
+    list_display = ['title', 'is_standalone', 'is_active', 'created_at']
+    search_fields = ['title', 'description', 'prerequisites']
+    list_filter = ['is_standalone', 'is_active']
+    readonly_fields = ['slug', 'created_at', 'updated_at']
+    ordering = ['title']
+
     inlines = [
         ModuleLevelLinkInline,
         ModuleLecturerInline,
-        LectureMaterialInline,
-        EvaluationComponentInline
+        ModuleMaterialInline,
+        EvaluationComponentInline,
     ]
-    readonly_fields = ['created_at', 'updated_at']
-    ordering = ['title']
-    #filter_horizontal = ['levels']  # Power UX for M2M
 
+    actions = ["deactivate_all_materials"]
 
-# @admin.register(Badge)
-class BadgeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'linked_to', 'achievement_type', 'xp_reward', 'is_active', 'created_at', 'has_image']
-    list_filter = ['achievement_type', 'is_active', 'content_type']
-    search_fields = ['name', 'description']
-    readonly_fields = ['created_at']
-
-    def has_image(self, obj):
-        return bool(obj.image)
-    has_image.boolean = True
-    has_image.short_description = "Image Uploaded"
-
-    def linked_to(self, obj):
-        """Human-readable link target (e.g., 'Module: Web Dev')"""
-        if obj.content_object:
-            return f"{obj.content_type.model.capitalize()}: {str(obj.content_object)}"
-        return "-"
-    linked_to.short_description = "Linked To"
+    @admin.action(description="Deactivate ALL materials in selected modules")
+    def deactivate_all_materials(self, request, queryset):
+        total = 0
+        for module in queryset:
+            updated = module.materials.update(is_active=False)
+            total += updated
+        self.message_user(request, f"Deactivated {total} materials across {queryset.count()} module(s).")
 
 
 @admin.register(ModuleLevelLink)
@@ -86,27 +120,67 @@ class ModuleLevelLinkAdmin(admin.ModelAdmin):
     list_filter = ['level__program']
     autocomplete_fields = ['module', 'level']
     ordering = ['level', 'order']
+    search_fields = ['module__title', 'level__title']
 
 
 @admin.register(ModuleLecturer)
 class ModuleLecturerAdmin(admin.ModelAdmin):
     list_display = ['module', 'lecturer', 'role']
-    search_fields = ['lecturer__first_name', 'lecturer__last_name']
+    search_fields = ['lecturer__first_name', 'lecturer__last_name', 'lecturer__email', 'module__title']
     autocomplete_fields = ['module', 'lecturer']
 
 
-@admin.register(LectureMaterial)
-class LectureMaterialAdmin(admin.ModelAdmin):
-    list_display = ['title', 'module', 'audience', 'created_at']
-    search_fields = ['title', 'module__title']
+@admin.register(ModuleMaterial)
+class ModuleMaterialAdmin(admin.ModelAdmin):
+    list_display = ['title', 'module', 'type', 'audience', 'version', 'is_active', 'created_at', 'open_link', 'download_link']
+    list_filter = ['type', 'audience', 'is_active', 'module']
+    search_fields = ['title', 'module__title', 'version', 'description']
     autocomplete_fields = ['module']
-    readonly_fields = ['created_at']
+    readonly_fields = ['slug', 'created_at', 'content_type', 'file_size', 'admin_open_link', 'admin_download_link']
+    fields = (
+        'module', 'title', 'slug', 'description',
+        'type', 'audience',
+        'file', 'external_url',
+        'version', 'is_active',
+        ('content_type', 'file_size'),
+        'created_at',
+        'admin_open_link', 'admin_download_link',
+    )
+    ordering = ['-created_at']
+
+    def open_link(self, obj):
+        if obj.file and hasattr(obj.file, "url"):
+            return format_html('<a href="{}" target="_blank">Open</a>', obj.file.url)
+        if obj.external_url:
+            return format_html('<a href="{}" target="_blank">External</a>', obj.external_url)
+        return "-"
+    open_link.short_description = "Open"
+
+    def download_link(self, obj):
+        try:
+            url = reverse("module:module-materials-download", kwargs={
+                "module_pk": obj.module.slug,  # nested router kwarg name from rest_framework_nested
+                "slug": obj.slug,
+            })
+            return format_html('<a href="{}" target="_blank">Download</a>', url)
+        except Exception:
+            return "-"
+    download_link.short_description = "Download"
+
+    # Reuse the inline helpers for detail page too
+    def admin_open_link(self, obj):  # for readonly_fields
+        return self.open_link(obj)
+    def admin_download_link(self, obj):
+        return self.download_link(obj)
 
 
 @admin.register(EvaluationComponent)
 class EvaluationComponentAdmin(admin.ModelAdmin):
     list_display = ['title', 'module', 'type', 'weight', 'created_at']
     search_fields = ['title', 'module__title']
-    list_filter = ['type']
+    list_filter = ['type', 'module']
     autocomplete_fields = ['module']
     readonly_fields = ['created_at', 'updated_at']
+    ordering = ['module', 'type', 'title']
+
+
