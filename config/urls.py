@@ -67,6 +67,7 @@ urlpatterns = [
     path("api/achievement/", include("achievement.urls")),
     path("api/dashboard/", include("dashboard.urls")),
     path("api/engagement/", include("engagement.urls")),
+    path("api/media/", include("media.urls")),
 ]
 
 
