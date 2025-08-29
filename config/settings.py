@@ -51,6 +51,15 @@ CELERY_TIMEZONE = TIME_ZONE
 # Optional: speed up dev, avoid storing results if you don't need them
 # CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", None)
 
+CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
+CF_STREAM_TOKEN = os.getenv("CF_STREAM_TOKEN")
+CF_WEBHOOK_SECRET = os.getenv("CF_WEBHOOK_SECRET")
+
+# parse CSV list of allowed origins
+FRONTEND_ALLOWED_ORIGINS = [
+    o.strip() for o in os.getenv("FRONTEND_ALLOWED_ORIGINS", "").split(",") if o.strip()
+]
+
 # Fail fast if no secret
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
