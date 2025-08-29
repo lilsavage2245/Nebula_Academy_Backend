@@ -132,7 +132,7 @@ INSTALLED_APPS = [
     'badgetasks.apps.BadgetasksConfig',
     'engagement',  # ensure this is a valid app module
     'application.apps.ApplicationConfig',
-    'media.apps.MediaConfig',
+    'uploadmedia.apps.UploadmediaConfig',
 
 ]
 
