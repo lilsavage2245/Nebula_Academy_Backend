@@ -55,15 +55,14 @@ CF_ACCOUNT_ID = os.getenv("CF_ACCOUNT_ID")
 CF_STREAM_TOKEN = os.getenv("CF_STREAM_TOKEN")
 CF_WEBHOOK_SECRET = os.getenv("CF_WEBHOOK_SECRET")
 
-# prevent small/medium uploads from tripping limits
-DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024      # 50 MB (or higher)
+# settings.py
+DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024      # 50 MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024
-
-# ensure large files spill to temp files rather than memory (if something else handles them)
 FILE_UPLOAD_HANDLERS = [
     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
     "django.core.files.uploadhandler.MemoryFileUploadHandler",
 ]
+
 
 
 # parse CSV list of allowed origins
