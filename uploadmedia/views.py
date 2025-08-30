@@ -4,6 +4,7 @@ from django.conf import settings
 from rest_framework import views, permissions, status
 from rest_framework.response import Response
 from classes.models import Lesson  # adjust if your Lesson path differs
+from .models import LessonVideo
 
 class IsStaffUploader(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -48,10 +49,15 @@ class CreateDirectUploadView(views.APIView):
         uid = data["result"]["uid"]
         upload_url = data["result"]["uploadURL"]
 
-        # mark lesson state (ensure these fields exist on Lesson)
-        lesson.video_provider = "CLOUDFLARE"
-        lesson.video_provider_id = uid
-        lesson.video_status = "UPLOADING"
-        lesson.save(update_fields=["video_provider", "video_provider_id", "video_status"])
+        # upsert the LessonVideo record
+        video, _ = LessonVideo.objects.update_or_create(
+            lesson=lesson,
+            defaults={
+                "provider": "CLOUDFLARE",
+                "provider_id": uid,
+                "status": "UPLOADING",
+                "created_by": request.user,
+            },
+        )
 
         return Response({"upload_url": upload_url, "asset_uid": uid}, status=status.HTTP_201_CREATED)

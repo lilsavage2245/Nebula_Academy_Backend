@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 from classes.models import Lesson
+from .models import LessonVideo
 
 class CloudflareStreamWebhook(APIView):
     authentication_classes = []
@@ -23,22 +24,24 @@ class CloudflareStreamWebhook(APIView):
             return Response({"ok": True})
 
         try:
-            lesson = Lesson.objects.get(video_provider="CLOUDFLARE", video_provider_id=uid)
-        except Lesson.DoesNotExist:
+            lv = LessonVideo.objects.select_related("lesson").get(provider="CLOUDFLARE", provider_id=uid)
+        except LessonVideo.DoesNotExist:
             return Response({"ok": True})
 
+        # status mapping
         if event in ("video.ready", "ready"):
-            lesson.video_status = "READY"
+            lv.status = "READY"
         elif event in ("error",):
-            lesson.video_status = "ERROR"
+            lv.status = "ERROR"
         else:
-            lesson.video_status = "PROCESSING"
+            lv.status = "PROCESSING"
 
-        if duration:
-            try:
-                lesson.duration_minutes = float(duration) / 60.0
-            except Exception:
-                pass
+        if isinstance(duration, (int, float)) and duration > 0:
+            lv.duration_seconds = int(duration)
+            # keep Lesson.duration_minutes updated for your analytics
+            if hasattr(lv.lesson, "duration_minutes"):
+                lv.lesson.duration_minutes = max(1, round(duration / 60.0))
+                lv.lesson.save(update_fields=["duration_minutes"])
 
-        lesson.save(update_fields=["video_status", "duration_minutes"])
+        lv.save(update_fields=["status", "duration_seconds"])
         return Response({"ok": True})
