@@ -3,7 +3,7 @@ from django.urls import path, re_path
 from .views import CreateDirectUploadView
 from .webhooks import CloudflareStreamWebhook
 from .diag import CloudflareDiag
-from .views import ProxyDirectUploadView  # <-- NEW
+from .views_proxy import proxy_direct_upload
 
 urlpatterns = [
     path("videos/direct-upload/", CreateDirectUploadView.as_view(), name="cf_direct_upload_slash"),
@@ -11,5 +11,5 @@ urlpatterns = [
     path("webhooks/cloudflare/", CloudflareStreamWebhook.as_view(), name="cf_stream_webhook_slash"),
     re_path(r"^webhooks/cloudflare$", CloudflareStreamWebhook.as_view(), name="cf_stream_webhook_no_slash"),
     path("diag/cf/", CloudflareDiag.as_view()),
-    path("videos/proxy-upload/", ProxyDirectUploadView.as_view()),  # <-- NEW
+    path("videos/proxy-upload/", proxy_direct_upload),  # <-- streaming proxy
 ]
