@@ -26,50 +26,59 @@ class CreateDirectUploadView(views.APIView):
 
             lesson = Lesson.objects.get(id=lesson_id)
 
+            # uploadmedia/views.py  (inside post)
             cf_headers = {"Authorization": f"Bearer {settings.CF_STREAM_TOKEN}"}
-            
-            # uploadmedia/views.py (when building payload)
-            origin = request.headers.get("Origin") or ""
-            # 'http://localhost:3000' => 'localhost:3000'
-            this_host = origin.split("://")[-1] if "://" in origin else origin
 
+            origin = (request.headers.get("Origin") or "").split("://")[-1]  # host[:port]
             allowed = [
                 "localhost:3000",
                 "127.0.0.1:3000",
                 "staging.nebulacodeacademy.com",
                 "api-staging.nebulacodeacademy.com",
             ]
-            if this_host and this_host not in allowed:
-                allowed.append(this_host)  # dynamically allow current host:port
-
+            if origin and origin not in allowed:
+                allowed.append(origin)
 
             payload = {
                 "maxDurationSeconds": 4 * 60 * 60,
                 "creator": str(request.user.id),
-                "allowedOrigins": allowed,   # hosts only!
-                "thumbnailTimestampPct": 0.1,  # <-- was 10
+                "allowedOrigins": allowed,       # hosts only, no protocol
+                "thumbnailTimestampPct": 0.1,    # 10% frame; must be 0..1
             }
 
             r = requests.post(
                 f"https://api.cloudflare.com/client/v4/accounts/{settings.CF_ACCOUNT_ID}/stream/direct_upload",
-                headers={**cf_headers},
+                headers=cf_headers,
                 json=payload,
                 timeout=30,
             )
-            data = r.json()
-            if not data.get("success"):
+
+            content_type = r.headers.get("Content-Type","")
+            raw_text = r.text
+            try:
+                data = r.json()
+            except Exception:
+                data = {"parse_error": True, "raw": raw_text}
+
+            if not r.ok or not data.get("success", False):
+                # log and surface EVERYTHING so you see the exact cause in the browser
+                from django.utils.timezone import now
+                print(f"[{now()}] CF direct_upload FAIL {r.status_code} :: {raw_text[:1000]}")
                 return Response(
                     {
                         "detail": "cloudflare_error",
-                        "status_code": r.status_code,
-                        "errors": data.get("errors"),
-                        "messages": data.get("messages"),
+                        "http_status": r.status_code,
+                        "request_payload": payload,
+                        "response_content_type": content_type,
+                        "response_json": data,
+                        "response_raw": raw_text[:2000],  # first 2k chars for readability
                     },
                     status=502,
                 )
 
             uid = data["result"]["uid"]
             upload_url = data["result"]["uploadURL"]
+
 
             # ---- DB write (can be temporarily wrapped to not block uploads)
             video, _ = LessonVideo.objects.update_or_create(
