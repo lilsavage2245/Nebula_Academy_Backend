@@ -27,15 +27,26 @@ class CreateDirectUploadView(views.APIView):
             lesson = Lesson.objects.get(id=lesson_id)
 
             cf_headers = {"Authorization": f"Bearer {settings.CF_STREAM_TOKEN}"}
+            
+            # uploadmedia/views.py (when building payload)
+            origin = request.headers.get("Origin") or ""
+            # 'http://localhost:3000' => 'localhost:3000'
+            this_host = origin.split("://")[-1] if "://" in origin else origin
+
+            allowed = [
+                "localhost:3000",
+                "127.0.0.1:3000",
+                "staging.nebulacodeacademy.com",
+                "api-staging.nebulacodeacademy.com",
+            ]
+            if this_host and this_host not in allowed:
+                allowed.append(this_host)  # dynamically allow current host:port
+
+
             payload = {
                 "maxDurationSeconds": 4 * 60 * 60,
                 "creator": str(request.user.id),
-                "allowedOrigins": [
-                    "localhost:3000",
-                    "127.0.0.1:3000",
-                    "staging.nebulacodeacademy.com",
-                    "api-staging.nebulacodeacademy.com",
-                ],
+                "allowedOrigins": allowed,   # hosts only!
                 "thumbnailTimestampPct": 0.1,  # <-- was 10
             }
 
