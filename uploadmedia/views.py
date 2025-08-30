@@ -29,7 +29,7 @@ class CreateDirectUploadView(views.APIView):
             # uploadmedia/views.py  (inside post)
             cf_headers = {"Authorization": f"Bearer {settings.CF_STREAM_TOKEN}"}
 
-            origin = (request.headers.get("Origin") or "").split("://")[-1]  # e.g. localhost:3000
+            origin = (request.headers.get("Origin") or "").split("://")[-1]  # host[:port]
             allowed = [
                 "localhost:3000",
                 "127.0.0.1:3000",
@@ -48,12 +48,11 @@ class CreateDirectUploadView(views.APIView):
 
             r = requests.post(
                 f"https://api.cloudflare.com/client/v4/accounts/{settings.CF_ACCOUNT_ID}/stream/direct_upload",
-                headers=cf_headers,
+                headers={"Authorization": f"Bearer {settings.CF_STREAM_TOKEN}"},
                 json=payload,
                 timeout=30,
             )
 
-            content_type = r.headers.get("Content-Type","")
             raw_text = r.text
             try:
                 data = r.json()
@@ -61,17 +60,16 @@ class CreateDirectUploadView(views.APIView):
                 data = {"parse_error": True, "raw": raw_text}
 
             if not r.ok or not data.get("success", False):
-                # log and surface EVERYTHING so you see the exact cause in the browser
-                from django.utils.timezone import now
-                print(f"[{now()}] CF direct_upload FAIL {r.status_code} :: {raw_text[:1000]}")
+                # Put the full reason into `detail` so your http.js shows it
+                errors = data.get("errors") or []
+                messages = data.get("messages") or []
+                msg = "; ".join([e.get("message","") for e in errors] + [m.get("message","") for m in messages]) or raw_text[:500]
                 return Response(
                     {
-                        "detail": "cloudflare_error",
+                        "detail": f"cloudflare_error: {msg}",
                         "http_status": r.status_code,
-                        "request_payload": payload,
-                        "response_content_type": content_type,
-                        "response_json": data,
-                        "response_raw": raw_text[:2000],  # first 2k chars for readability
+                        "payload": payload,
+                        "cf": data,
                     },
                     status=502,
                 )
