@@ -17,6 +17,11 @@ class Lesson(SlugModelMixin, SoftDeleteModelMixin, models.Model):
         ('HYBRID', 'Live + Recording'),
     ]
 
+    VIDEO_PROVIDERS = (
+        ("NONE", "None"),
+        ("CLOUDFLARE", "Cloudflare Stream"),
+    )
+
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -44,6 +49,9 @@ class Lesson(SlugModelMixin, SoftDeleteModelMixin, models.Model):
     slug = models.SlugField(unique=True, blank=True)
     is_published = models.BooleanField(default=False)
     duration_minutes = models.PositiveIntegerField(null=True, blank=True)
+    video_provider = models.CharField(max_length=20, choices=VIDEO_PROVIDERS, default="NONE")
+    video_provider_id = models.CharField(max_length=128, blank=True, null=True)  # Cloudflare asset UID
+    video_status = models.CharField(max_length=32, default="NONE")  # NONE|UPLOADING|READY|ERROR
 
     video_embed_url = models.URLField(blank=True)
     worksheet_link = models.URLField(blank=True)
@@ -52,6 +60,9 @@ class Lesson(SlugModelMixin, SoftDeleteModelMixin, models.Model):
     allow_ratings = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_video_ready(self) -> bool:
+        return self.video_provider == "CLOUDFLARE" and self.video_status == "READY"
 
     def __str__(self):
         return self.title
