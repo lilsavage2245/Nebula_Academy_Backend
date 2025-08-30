@@ -1,10 +1,16 @@
 # uploadmedia/views.py
-import logging, requests, traceback, sys
+
+import logging, requests, traceback, sys, io, re
 from django.conf import settings
 from rest_framework import views, permissions, status
 from rest_framework.response import Response
 from classes.models import Lesson
 from .models import LessonVideo  # the OneToOne we added
+from django.http import HttpResponse
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 
 log = logging.getLogger(__name__)
 
@@ -101,3 +107,37 @@ class CreateDirectUploadView(views.APIView):
                 {"detail": f"{type(e).__name__}: {e}", "where": tb},
                 status=500
             )
+
+CF_UPLOAD_HOST = "upload.cloudflarestream.com"
+CF_UPLOAD_RE = re.compile(rf"^https://{CF_UPLOAD_HOST}/[A-Za-z0-9]+$")
+
+class ProxyDirectUploadView(APIView):
+    permission_classes = [IsAuthenticated]   # keep your role guard if you want
+
+    def post(self, request):
+        to = request.query_params.get("to")
+        if not to or not CF_UPLOAD_RE.match(to):
+            return Response({"detail": "Invalid or missing 'to' upload URL"}, status=400)
+
+        # Read raw bytes (don’t parse multipart)
+        raw = request.body  # bytes
+        if not raw:
+            return Response({"detail": "Empty body"}, status=400)
+
+        try:
+            # Forward raw bytes to Cloudflare (no fancy headers)
+            upstream = requests.post(
+                to,
+                data=io.BytesIO(raw),
+                headers={"Content-Type": "application/octet-stream"},
+                timeout=None,  # big uploads
+            )
+        except Exception as e:
+            return Response({"detail": "proxy_failed", "message": str(e)}, status=502)
+
+        # Relay upstream body + status verbatim
+        return HttpResponse(
+            upstream.content,
+            status=upstream.status_code,
+            content_type=upstream.headers.get("Content-Type", "text/plain"),
+        )
