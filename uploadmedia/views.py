@@ -68,9 +68,10 @@ class CreateDirectUploadView(views.APIView):
             return Response({"upload_url": upload_url, "asset_uid": uid}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            # Log full traceback server-side; return JSON so the UI shows the real issue
-            log.exception("direct-upload failed")
+            log.exception("direct-upload failed")  # keep this
+            import sys, traceback
+            tb = "".join(traceback.format_exception(*sys.exc_info())[-3:])  # last 3 frames
             return Response(
-                {"detail": f"server_error: {type(e).__name__}", "message": str(e)},
-                status=500
+                {"detail": "server_error", "error_type": type(e).__name__, "message": str(e), "where": tb},
+                status=500,
             )
