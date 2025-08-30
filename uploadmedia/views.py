@@ -18,39 +18,35 @@ class CreateDirectUploadView(views.APIView):
 
     def post(self, request):
         try:
-            lesson_id = request.data.get("lesson_id")
-            if not str(lesson_id).strip().isdigit():
+            raw = request.data.get("lesson_id")
+            try:
+                lesson_id = int(raw)
+            except (TypeError, ValueError):
                 return Response({"detail": "lesson_id must be an integer"}, status=400)
 
-            lesson = Lesson.objects.get(id=int(lesson_id))
+            lesson = Lesson.objects.get(id=lesson_id)
 
             cf_headers = {"Authorization": f"Bearer {settings.CF_STREAM_TOKEN}"}
             payload = {
                 "maxDurationSeconds": 4 * 60 * 60,
                 "creator": str(request.user.id),
                 "allowedOrigins": [
-                    "localhost:3000", "127.0.0.1:3000",
-                    "staging.nebulacodeacademy.com", "api-staging.nebulacodeacademy.com",
+                    "localhost:3000",
+                    "127.0.0.1:3000",
+                    "staging.nebulacodeacademy.com",
+                    "api-staging.nebulacodeacademy.com",
                 ],
-                "thumbnailTimestampPct": 10,
+                "thumbnailTimestampPct": 0.1,  # <-- was 10
             }
+
             r = requests.post(
                 f"https://api.cloudflare.com/client/v4/accounts/{settings.CF_ACCOUNT_ID}/stream/direct_upload",
-                headers={"Authorization": f"Bearer {settings.CF_STREAM_TOKEN}"},
-                json={
-                    "maxDurationSeconds": 4 * 60 * 60,
-                    "creator": str(request.user.id),
-                    "allowedOrigins": [
-                        "localhost:3000", "127.0.0.1:3000",
-                        "staging.nebulacodeacademy.com", "api-staging.nebulacodeacademy.com",
-                    ],
-                    "thumbnailTimestampPct": 10,
-                },
+                headers={**cf_headers},
+                json=payload,
                 timeout=30,
             )
             data = r.json()
             if not data.get("success"):
-                # ⚠️ Surface details so the frontend shows more than “cloudflare_error”
                 return Response(
                     {
                         "detail": "cloudflare_error",
@@ -77,6 +73,8 @@ class CreateDirectUploadView(views.APIView):
 
             return Response({"upload_url": upload_url, "asset_uid": uid}, status=status.HTTP_201_CREATED)
 
+        except Lesson.DoesNotExist:
+            return Response({"detail": f"Lesson {lesson_id} not found"}, status=404)
         except Exception as e:
             log.exception("direct-upload failed")
             tb = "".join(traceback.format_exception(*sys.exc_info())[-3:])
