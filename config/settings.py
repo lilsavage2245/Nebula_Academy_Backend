@@ -234,12 +234,16 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "EXCEPTION_HANDLER": "rest_framework.views.exception_handler",  # default JSON handler
     # If you use throttling, also set DEFAULT_THROTTLE_CLASSES
     # 'DEFAULT_THROTTLE_CLASSES': ['rest_framework.throttling.UserRateThrottle'],
     'DEFAULT_THROTTLE_RATES': {
         'password_reset': '3/hour',
     },
 }
+
+DEBUG_PROPAGATE_EXCEPTIONS = False
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Nebula Code Academy API',
