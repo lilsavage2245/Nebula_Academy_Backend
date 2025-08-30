@@ -1,10 +1,7 @@
 # uploadmedia/views_proxy.py
-import os
-import re
-import tempfile
+import os, re, tempfile
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
 import requests
 
 CF_UPLOAD_HOST = "upload.cloudflarestream.com"
@@ -19,52 +16,42 @@ def proxy_direct_upload(request):
     if not to or not CF_UPLOAD_RE.match(to):
         return JsonResponse({"detail": "Invalid or missing 'to' upload URL"}, status=400)
 
-    # 1) Get content length from client (browser sets this)
-    content_length = request.META.get("CONTENT_LENGTH")
-    try:
-        content_length_int = int(content_length) if content_length is not None else None
-    except ValueError:
-        content_length_int = None
-
-    if not content_length_int or content_length_int <= 0:
-        # Cloudflare rejects chunked uploads; we must provide Content-Length
-        return JsonResponse({"detail": "Missing or invalid Content-Length"}, status=400)
-
-    # 2) Spill request body to a temp file so we can pass a file object with a fixed length
-    #    (Prevents DRF/Django from buffering in RAM and gives requests a seekable stream.)
+    # 1) Spill the incoming request body to a temp file (don’t trust Content-Length;
+    #    read until EOF so we never under/over-read).
     try:
         tmp = tempfile.NamedTemporaryFile(delete=False)
-        # copy from wsgi.input to tmp in chunks
         src = request.META.get("wsgi.input")
-        remaining = content_length_int
-        chunk_size = 1024 * 1024
-        while remaining > 0:
-            chunk = src.read(min(chunk_size, remaining))
+        chunk = b""
+        while True:
+            chunk = src.read(1024 * 1024)
             if not chunk:
                 break
             tmp.write(chunk)
-            remaining -= len(chunk)
         tmp.flush()
-        tmp.seek(0)
+        size = os.path.getsize(tmp.name)
     except Exception as e:
         try:
-            tmp.close()
-            os.unlink(tmp.name)
+            tmp.close(); os.unlink(tmp.name)
         except Exception:
             pass
         return JsonResponse({"detail": "proxy_buffer_failed", "message": str(e)}, status=502)
 
-    # 3) Forward to Cloudflare with Content-Length and raw bytes
+    # 2) Post the file to Cloudflare with a fixed Content-Length (no chunked)
     try:
         with open(tmp.name, "rb") as f:
+            # Let requests derive Content-Length from the file descriptor.
+            # Also explicitly set a simple Content-Type.
             upstream = requests.post(
                 to,
-                data=f,  # file-like with known length
+                data=f,  # raw body, not multipart
                 headers={
                     "Content-Type": "application/octet-stream",
-                    "Content-Length": str(content_length_int),
+                    # explicitly pin Content-Length to avoid chunked transfer
+                    "Content-Length": str(size),
+                    # disable 100-continue shenanigans on some proxies
+                    "Expect": "",
                 },
-                timeout=None,  # large uploads
+                timeout=None,
             )
     finally:
         try:
@@ -72,6 +59,7 @@ def proxy_direct_upload(request):
         except Exception:
             pass
 
+    # 3) Relay Cloudflare’s response verbatim to your client
     return HttpResponse(
         upstream.content,
         status=upstream.status_code,
