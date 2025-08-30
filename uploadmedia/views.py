@@ -29,7 +29,7 @@ class CreateDirectUploadView(views.APIView):
             # uploadmedia/views.py  (inside post)
             cf_headers = {"Authorization": f"Bearer {settings.CF_STREAM_TOKEN}"}
 
-            origin = (request.headers.get("Origin") or "").split("://")[-1]  # host[:port]
+            origin = (request.headers.get("Origin") or "").split("://")[-1]  # e.g. localhost:3000
             allowed = [
                 "localhost:3000",
                 "127.0.0.1:3000",
@@ -42,8 +42,8 @@ class CreateDirectUploadView(views.APIView):
             payload = {
                 "maxDurationSeconds": 4 * 60 * 60,
                 "creator": str(request.user.id),
-                "allowedOrigins": allowed,       # hosts only, no protocol
-                "thumbnailTimestampPct": 0.1,    # 10% frame; must be 0..1
+                "allowedOrigins": allowed,     # hosts only, no http://
+                "thumbnailTimestampPct": 0.1,  # 10%
             }
 
             r = requests.post(
