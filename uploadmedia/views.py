@@ -36,11 +36,30 @@ class CreateDirectUploadView(views.APIView):
             }
             r = requests.post(
                 f"https://api.cloudflare.com/client/v4/accounts/{settings.CF_ACCOUNT_ID}/stream/direct_upload",
-                headers=cf_headers, json=payload, timeout=30
+                headers={"Authorization": f"Bearer {settings.CF_STREAM_TOKEN}"},
+                json={
+                    "maxDurationSeconds": 4 * 60 * 60,
+                    "creator": str(request.user.id),
+                    "allowedOrigins": [
+                        "localhost:3000", "127.0.0.1:3000",
+                        "staging.nebulacodeacademy.com", "api-staging.nebulacodeacademy.com",
+                    ],
+                    "thumbnailTimestampPct": 10,
+                },
+                timeout=30,
             )
             data = r.json()
             if not data.get("success"):
-                return Response({"detail": "cloudflare_error", "cf": data}, status=502)
+                # ⚠️ Surface details so the frontend shows more than “cloudflare_error”
+                return Response(
+                    {
+                        "detail": "cloudflare_error",
+                        "status_code": r.status_code,
+                        "errors": data.get("errors"),
+                        "messages": data.get("messages"),
+                    },
+                    status=502,
+                )
 
             uid = data["result"]["uid"]
             upload_url = data["result"]["uploadURL"]
